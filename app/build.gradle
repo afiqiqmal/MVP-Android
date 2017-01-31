@@ -1,0 +1,146 @@
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+
+apply plugin: 'com.android.application'
+apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'com.neenbedankt.android-apt'
+
+def getDateTime() {
+    DateFormat df = new SimpleDateFormat("yyyyMMdd");
+    return df.format(new Date());
+}
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+
+    defaultConfig {
+        applicationId "com.java.mvp.mvpandroid"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        multiDexEnabled true
+    }
+
+
+    signingConfigs {
+
+        release {
+            storeFile file('../mvp-keystore.jks')
+            storePassword EHALAL_STORE_PASSWORD
+            keyAlias EHALAL_KEY_ALIAS
+            keyPassword EHALAL_KEY_PASSWORD
+        }
+
+        debug{
+        }
+    }
+
+    buildTypes {
+
+        debug {
+            testCoverageEnabled true
+            versionNameSuffix "-staging"
+            minifyEnabled false
+
+            buildConfigField 'String','URL_API',SMART_URL_API_PROD
+        }
+
+        release {
+            zipAlignEnabled true
+            minifyEnabled true
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            buildConfigField 'String','URL_API',EHALAL_URL_API_PROD
+        }
+
+        applicationVariants.all { variant ->
+            variant.outputs.each { output ->
+                def finalName = "ehalal-" + variant.versionName + "-" + variant.productFlavors[0].name + "-" + variant.buildType.name + "-" + getDateTime() + ".apk";
+                output.outputFile = new File(output.outputFile.parent, finalName)
+            }
+        }
+    }
+
+    productFlavors {
+        mock {
+            applicationId rootProject.packageNameMock
+        }
+        prod {
+            applicationId rootProject.packageName
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+//    compile group: 'com.nineoldandroids', name: 'library', version: '2.4.0'
+    compile project(':app-client');
+    testCompile 'junit:junit:4.12'
+
+    // Android Support
+    compile libraries.design
+    compile libraries.cardView
+    compile libraries.appCompat
+    compile libraries.supportV4
+
+
+    // Google Play
+    compile libraries.googleMap
+    compile libraries.googleLocation
+
+
+    //Login
+    compile libraries.googlePlus
+    compile 'com.facebook.android:facebook-android-sdk:4.+'
+
+    // Json
+    compile libraries.googleGson
+
+    // Firebase
+    compile libraries.firebaseAnalytic
+    compile libraries.firebasegcm
+    compile libraries.firebaseCrash
+
+    // Dagger
+    compile libraries.dagger
+    apt libraries.daggerCompiler
+    provided libraries.javaAnnotations
+
+    // Icepick
+    compile libraries.icepick
+    provided libraries.icepickProcessor
+
+    // RxAndroid
+    compile libraries.rxAndroid
+
+    compile libraries.butterknife
+    apt libraries.butterknifeApt
+
+    //Image Rendering
+    compile libraries.glide
+
+}
+
+configurations.all {
+    resolutionStrategy {
+        force libraries.supportAnnotations
+    }
+}
+
+apply plugin: 'com.google.gms.google-services'
