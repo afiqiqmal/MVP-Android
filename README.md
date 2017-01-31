@@ -50,3 +50,9 @@ Create gradle.properties (if not exist), put
 SMART_URL_API_PROD = "YOUR API URL"
 ```
 
+##Sample
+Only one Sample of MVP provided which in splash folder<br>
+- SplashActivity - Activity
+- SplashConnector - View
+- SplashManager - Model
+- SplashPresenter - Presenter
