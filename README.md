@@ -8,6 +8,9 @@ MVP (Model View Presenter) pattern is a derivative from the well known MVC (Mode
 - Ideally the MVP pattern would achieve that same logic might have completely different and interchangeable views.
 - MVP is not an architectural pattern, it’s only responsible for the presentation layer
 
+
+![Alt text](https://davidguerrerodiaz.files.wordpress.com/2015/10/18289.jpg "MVC vs MVP")
+
 ##Why use MVP?
 - In Android we have a problem arising from the fact that Android activities are closely coupled to both interface and data access mechanisms. For an application to be easily extensible and maintainable we need to define well separated layers. Instead of retrieving the same data from a database, we need to do it from a web service? We would have to redo our entire view .
 MVP makes views independent from our data source. 
