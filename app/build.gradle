@@ -31,9 +31,9 @@ android {
 
         release {
             storeFile file('../mvp-keystore.jks')
-            storePassword EHALAL_STORE_PASSWORD
-            keyAlias EHALAL_KEY_ALIAS
-            keyPassword EHALAL_KEY_PASSWORD
+            storePassword ""
+            keyAlias ""
+            keyPassword ""
         }
 
         debug{
@@ -56,12 +56,12 @@ android {
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
-            buildConfigField 'String','URL_API',EHALAL_URL_API_PROD
+            buildConfigField 'String','URL_API',SMART_URL_API_PROD
         }
 
         applicationVariants.all { variant ->
             variant.outputs.each { output ->
-                def finalName = "ehalal-" + variant.versionName + "-" + variant.productFlavors[0].name + "-" + variant.buildType.name + "-" + getDateTime() + ".apk";
+                def finalName = "mvp-" + variant.versionName + "-" + variant.productFlavors[0].name + "-" + variant.buildType.name + "-" + getDateTime() + ".apk";
                 output.outputFile = new File(output.outputFile.parent, finalName)
             }
         }
@@ -89,7 +89,6 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-//    compile group: 'com.nineoldandroids', name: 'library', version: '2.4.0'
     compile project(':app-client');
     testCompile 'junit:junit:4.12'
 
