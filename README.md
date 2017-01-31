@@ -43,3 +43,10 @@ In an application with a good layered architecture, this model would only be the
 
 
 This project already setup firebase analytics. just replace the <b>google-service.json</b> with your json file.
+<br>
+<br>
+Create gradle.properties (if not exist), put
+```gradle
+SMART_URL_API_PROD = "YOUR API URL"
+```
+
