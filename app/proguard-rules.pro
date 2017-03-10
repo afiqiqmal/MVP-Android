@@ -16,6 +16,8 @@
 #   public *;
 #}
 -useuniqueclassmembernames
+-mergeinterfacesaggressively
+-allowaccessmodification
 
 #########--------Android Support--------#########
 -keep class android.support.v4.app.** { *; }
@@ -28,15 +30,7 @@
 }
 
 #########--------Remove Log--------#########
--assumenosideeffects class android.util.Log {
-    public static boolean isLoggable(java.lang.String, int);
-    public static *** d(...);
-    public static *** v(...);
-    public static *** i(...);
-    public static *** w(...);
-    public static *** e(...);
-    public static *** wtf(...);
-}
+-assumenosideeffects class android.util.Log { *; }
 
 #########--------Retrofit + RxJava--------#########
 -dontwarn okio.**
@@ -83,6 +77,27 @@
     long producerNode;
     long consumerNode;
 }
+
+##### ICEPICK ######
+-dontwarn icepick.**
+-keep class icepick.** { *; }
+-keep class **$$Icepick { *; }
+-keepclasseswithmembernames class * {
+    @icepick.* <fields>;
+}
+-keepnames class * { @icepick.State *;}
+
+
+###### BUTTER KNIFE ######
+# Retain generated class which implement Unbinder.
+-keep public class * implements butterknife.Unbinder { public <init>(**, android.view.View); }
+
+# Prevent obfuscation of types which use ButterKnife annotations since the simple name
+# is used to reflectively look up the generated ViewBinding.
+-keep class butterknife.*
+-keepclasseswithmembernames class * { @butterknife.* <methods>; }
+-keepclasseswithmembernames class * { @butterknife.* <fields>; }
+
 
 # Keep Model Classes
 -keep class com.mvp.model.** { *; }
