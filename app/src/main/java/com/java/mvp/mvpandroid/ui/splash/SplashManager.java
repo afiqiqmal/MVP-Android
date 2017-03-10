@@ -7,7 +7,8 @@ import com.mvp.client.entity.response.TokenResponse;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import rx.Observable;
+import io.reactivex.Observable;
+
 
 /**
  * @author : hafiq on 23/01/2017.

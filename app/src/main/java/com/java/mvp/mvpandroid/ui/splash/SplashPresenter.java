@@ -15,10 +15,10 @@ import com.mvp.client.entity.response.TokenResponse;
 
 import javax.inject.Inject;
 
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * @author : hafiq on 23/01/2017.
@@ -30,7 +30,7 @@ public class SplashPresenter {
     private final SplashManager manager;
     private final PreferencesRepository preferences;
     private SplashConnector mView;
-    private final CompositeSubscription mSubscription = new CompositeSubscription();
+    private final CompositeDisposable mSubscription = new CompositeDisposable();
 
     private TokenBroadCastService tokenBroadcastReceiver;
 
@@ -42,10 +42,10 @@ public class SplashPresenter {
     }
 
     public void getToken(TokenRequest request) {
-        Subscription s = manager.getToken(request)
+        Disposable s = manager.getToken(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(this::showLoading)
+                .doOnSubscribe(disposable -> showLoading())
                 .subscribe(tokenResponse -> {
                     preferences.setAuthToken(tokenResponse.getToken());
                     showContents(tokenResponse);

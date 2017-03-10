@@ -11,6 +11,7 @@ public class Constant {
     public static final String HEADER_ACCEPT = "Accept";
     public static final String HEADER_CONTENT_TYPE = "Content-Type";
     public static final String HEADER_AUTHORIZE = "Authorization";
+    public static final String CACHE_CONTROL = "Cache-Control";
 
     public static final String GRANT_TYPE = "grant_type";
     public static final String CLIENT_ID = "client_id";
@@ -21,5 +22,8 @@ public class Constant {
     public static final int WRITETIMEOUT = 20;
     public static final int CONNECTTIMEOUT = 20;
 
-    public static final String TAG = "MYE-HALAL";
+    public static final String TAG = "MVP";
+
+    public static final String LANGUAGE = "get_lang";
+    public static final String LANGUAGE_LOCALE = "get_lang_locale";
 }

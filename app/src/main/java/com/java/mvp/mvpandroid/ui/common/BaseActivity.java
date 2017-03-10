@@ -21,7 +21,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import butterknife.ButterKnife;
-import rx.Subscription;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by hafiq on 23/01/2017.
@@ -29,7 +29,7 @@ import rx.Subscription;
 
 public class BaseActivity extends AppCompatActivity {
 
-    protected List<Subscription> mSubscriptions;
+    protected List<Disposable> mSubscriptions;
 
     @Inject
     protected PreferencesRepository preferencesRepository;
@@ -79,15 +79,15 @@ public class BaseActivity extends AppCompatActivity {
         return getGraph().activityGraph(new ActivityModule(this));
     }
 
-    protected void addSubscription(Subscription s) {
+    protected void addSubscription(Disposable s) {
         if (mSubscriptions == null) mSubscriptions = new ArrayList<>();
         mSubscriptions.add(s);
     }
 
     protected void unsubscribeAll() {
         if (mSubscriptions == null) return;
-        for (Subscription s : mSubscriptions) {
-            s.unsubscribe();
+        for (Disposable s : mSubscriptions) {
+            s.dispose();
         }
     }
 

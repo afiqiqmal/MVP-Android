@@ -18,7 +18,6 @@ import java.util.UUID;
 public class MVPApplication extends Application {
 
     private Graph mGraph;
-    private String mUdid;
 
     @Override
     public void onCreate() {
@@ -27,8 +26,6 @@ public class MVPApplication extends Application {
         setGraph(DaggerGraph.builder()
                 .appModule(new AppModule(this))
                 .build());
-
-        setUdid();
     }
 
 
@@ -49,21 +46,4 @@ public class MVPApplication extends Application {
         return (MVPApplication) c.getApplicationContext();
     }
 
-    public static String getUdid(Context c) {
-        return getApp(c).getUdid();
-    }
-
-    public String getUdid() {
-        return mUdid;
-    }
-
-    public String setUdid() {
-        TelephonyManager tm = (TelephonyManager) getBaseContext().getSystemService(Context.TELEPHONY_SERVICE);
-        String tmDevice = "" + tm.getDeviceId();
-        String tmSerial = "" + tm.getSimSerialNumber();
-        String androidId = "" + Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
-        UUID deviceUuid = new UUID(androidId.hashCode(), ((long) tmDevice.hashCode() << 32) | tmSerial.hashCode());
-
-        return this.mUdid = deviceUuid.toString();
-    }
 }

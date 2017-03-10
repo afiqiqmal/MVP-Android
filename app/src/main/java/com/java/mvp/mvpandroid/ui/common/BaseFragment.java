@@ -21,7 +21,7 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import rx.Subscription;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by hafiq on 23/01/2017.
@@ -29,7 +29,7 @@ import rx.Subscription;
 
 public class BaseFragment extends Fragment {
 
-    protected List<Subscription> mSubscriptions;
+    protected List<Disposable> mSubscriptions;
     protected boolean mIsSubscriber = false;
 
     protected Unbinder unbinder;
@@ -79,7 +79,7 @@ public class BaseFragment extends Fragment {
         return ((BaseActivity) getActivity()).activityGraph();
     }
 
-    protected void addSubscription(Subscription... s) {
+    protected void addSubscription(Disposable... s) {
         if (mSubscriptions == null) mSubscriptions = new ArrayList<>();
         if (s != null) Collections.addAll(mSubscriptions, s);
     }
@@ -87,8 +87,8 @@ public class BaseFragment extends Fragment {
     protected void unsubscribeAll() {
         try {
             if (mSubscriptions == null) return;
-            for (Subscription s : mSubscriptions) {
-                s.unsubscribe();
+            for (Disposable s : mSubscriptions) {
+                s.dispose();
             }
         }
         catch (Exception ignored){}
