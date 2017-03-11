@@ -36,10 +36,12 @@ In an application with a good layered architecture, this model would only be the
 <br>
 ##Dependencies use in this project
 - RxAndroid
+- RxJava2
+- Retrofit2
 - Dagger
-- Dagger Compiler
 - Butterknife
 - Ice Pick
+- Dexter (Permission)
 
 
 This project already setup firebase analytics. just replace the <b>google-service.json</b> with your json file.
