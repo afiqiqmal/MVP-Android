@@ -1,5 +1,9 @@
 package com.java.mvp.mvpandroid.ui.common;
 
+import android.annotation.TargetApi;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
@@ -7,11 +11,21 @@ import android.view.View;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.java.mvp.mvpandroid.MVPApplication;
+import com.java.mvp.mvpandroid.R;
 import com.java.mvp.mvpandroid.analytics.AnalyticHelper;
 import com.java.mvp.mvpandroid.internal.ActivityGraph;
 import com.java.mvp.mvpandroid.internal.Graph;
+import com.java.mvp.mvpandroid.permission.PermissionConnector;
+import com.java.mvp.mvpandroid.permission.RequestMultiplePermissionListener;
+import com.java.mvp.mvpandroid.permission.RequestSinglePermissionListener;
 import com.java.mvp.mvpandroid.repository.PreferencesRepository;
 import com.java.mvp.mvpandroid.utils.ErrorUtils;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.multi.DialogOnAnyDeniedMultiplePermissionsListener;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
+import com.karumi.dexter.listener.single.DialogOnDeniedPermissionListener;
+import com.karumi.dexter.listener.single.PermissionListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -42,6 +56,12 @@ public class BaseFragment extends Fragment {
 
     @Inject
     protected AnalyticHelper analyticHelper;
+
+    @Inject
+    protected RequestSinglePermissionListener feedbackViewPermissionListener;
+
+    @Inject
+    protected RequestMultiplePermissionListener feedbackViewMultiplePermissionListener;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -92,5 +112,59 @@ public class BaseFragment extends Fragment {
             }
         }
         catch (Exception ignored){}
+    }
+
+    public void setPermission(PermissionConnector connector){
+        feedbackViewMultiplePermissionListener.setConnector(connector);
+        feedbackViewPermissionListener.setConnector(connector);
+    }
+
+    public void setDexterMultiplePermissions(Activity activity, MultiplePermissionsListener permissionsListener, String... permissions){
+        Dexter.withActivity(activity)
+                .withPermissions(permissions)
+                .withListener(permissionsListener)
+                .check();
+    }
+
+    public void setDexterPermission(Activity activity, PermissionListener permissionsListener, String permissions){
+        Dexter.withActivity(activity)
+                .withPermission(permissions)
+                .withListener(permissionsListener)
+                .check();
+    }
+
+    public DialogOnDeniedPermissionListener dialogPermission(Activity activity, String title, String message){
+        return DialogOnDeniedPermissionListener.Builder.withContext(activity)
+                .withTitle(title)
+                .withMessage(message)
+                .withButtonText(android.R.string.ok)
+                .withIcon(R.mipmap.ic_launcher)
+                .build();
+    }
+
+    public DialogOnAnyDeniedMultiplePermissionsListener dialogMultiplePermission(Activity activity, String title, String message){
+        return DialogOnAnyDeniedMultiplePermissionsListener.Builder.withContext(activity)
+                .withTitle(title)
+                .withMessage(message)
+                .withButtonText(android.R.string.ok)
+                .withIcon(R.mipmap.ic_launcher)
+                .build();
+    }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+    public void showMessageRationale(final PermissionToken token) {
+        new AlertDialog.Builder(getActivity()).setTitle("Attention")
+                .setCancelable(false)
+                .setMessage("This permission is needed for doing fancy stuff, so please, allow it!!!")
+                .setNegativeButton(android.R.string.cancel, (dialog, which) -> {
+                    dialog.dismiss();
+                    token.cancelPermissionRequest();
+                })
+                .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                    dialog.dismiss();
+                    token.continuePermissionRequest();
+                })
+                .setOnDismissListener(dialog -> token.cancelPermissionRequest())
+                .show();
     }
 }
