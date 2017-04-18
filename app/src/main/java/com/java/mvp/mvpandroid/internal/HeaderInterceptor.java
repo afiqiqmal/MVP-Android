@@ -1,6 +1,6 @@
 package com.java.mvp.mvpandroid.internal;
 
-import com.java.mvp.mvpandroid.repository.PreferencesRepository;
+import com.java.mvp.mvpandroid.repository.ConcealRepository;
 import com.mvp.client.internal.Constant;
 
 import java.io.IOException;
@@ -15,10 +15,10 @@ import okhttp3.Response;
 
 public class HeaderInterceptor implements Interceptor {
 
-    private PreferencesRepository mPrefs;
+    private ConcealRepository mPrefs;
     private String mAuth;
 
-    public HeaderInterceptor(PreferencesRepository p) {
+    public HeaderInterceptor(ConcealRepository p) {
         mPrefs = p;
     }
 

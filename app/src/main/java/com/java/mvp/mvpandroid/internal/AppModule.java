@@ -7,8 +7,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
 import com.java.mvp.mvpandroid.BuildConfig;
-import com.java.mvp.mvpandroid.repository.PreferencesRepository;
+import com.java.mvp.mvpandroid.repository.ConcealRepository;
 
+import com.java.mvp.mvpandroid.utils.BaseCryptUtils;
 import com.java.mvp.mvpandroid.utils.DeviceUtils;
 import com.mvp.client.RestApi;
 import com.mvp.client.internal.Constant;
@@ -69,7 +70,7 @@ public class AppModule {
 
     @Provides
     @Singleton
-    public OkHttpClient provideClient(PreferencesRepository u) {
+    public OkHttpClient provideClient(ConcealRepository u) {
         HttpLoggingInterceptor logger = new HttpLoggingInterceptor();
         logger.setLevel(HttpLoggingInterceptor.Level.BODY);
 
@@ -103,7 +104,7 @@ public class AppModule {
     public RestApi provideRestApi(OkHttpClient client, Gson g) {
 
         retrofit = new Retrofit.Builder()
-                .baseUrl(BuildConfig.URL_API)
+                .baseUrl(new BaseCryptUtils.Builder(mContext).decodeStringWithIteration(BuildConfig.URL_API))
                 .addConverterFactory(GsonConverterFactory.create(g))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(client)
@@ -114,7 +115,7 @@ public class AppModule {
 
     @Provides
     @Singleton
-    public PreferencesRepository providePrefences(Context context) {
-        return new PreferencesRepository(context);
+    public ConcealRepository providePrefences(Context context) {
+        return new ConcealRepository(context);
     }
 }

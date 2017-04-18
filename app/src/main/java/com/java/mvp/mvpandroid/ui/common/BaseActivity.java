@@ -21,7 +21,7 @@ import com.java.mvp.mvpandroid.internal.Graph;
 import com.java.mvp.mvpandroid.permission.PermissionConnector;
 import com.java.mvp.mvpandroid.permission.RequestMultiplePermissionListener;
 import com.java.mvp.mvpandroid.permission.RequestSinglePermissionListener;
-import com.java.mvp.mvpandroid.repository.PreferencesRepository;
+import com.java.mvp.mvpandroid.repository.ConcealRepository;
 import com.java.mvp.mvpandroid.utils.ErrorUtils;
 import com.java.mvp.mvpandroid.utils.ProgressDialogUtils;
 import com.karumi.dexter.Dexter;
@@ -42,7 +42,7 @@ import butterknife.ButterKnife;
 import io.reactivex.disposables.Disposable;
 
 /**
- * Created by hafiq on 23/01/2017.
+ * @author : hafiq on 23/01/2017.
  */
 
 public class BaseActivity extends AppCompatActivity {
@@ -50,7 +50,7 @@ public class BaseActivity extends AppCompatActivity {
     protected List<Disposable> mSubscriptions;
 
     @Inject
-    protected PreferencesRepository preferencesRepository;
+    protected ConcealRepository preferencesRepository;
 
     @Inject
     protected ErrorUtils errorUtils;

@@ -16,7 +16,7 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.google.gson.Gson;
 import com.java.mvp.mvpandroid.R;
-import com.java.mvp.mvpandroid.repository.PreferencesRepository;
+import com.java.mvp.mvpandroid.repository.ConcealRepository;
 import com.java.mvp.mvpandroid.ui.splash.SplashActivity;
 
 /**
@@ -28,7 +28,7 @@ public class FirebaseCloudMessagingService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        PreferencesRepository preferencesRepository = new PreferencesRepository(this);
+        ConcealRepository preferencesRepository = new ConcealRepository(this);
         if (preferencesRepository.isEnableTokenPush())
             sendNotification(remoteMessage);
     }

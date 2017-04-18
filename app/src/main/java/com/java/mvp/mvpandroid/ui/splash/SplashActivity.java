@@ -23,7 +23,7 @@ import com.mvp.client.internal.Constant;
 import javax.inject.Inject;
 
 /**
- * Created by hafiq on 23/01/2017.
+ * @author : hafiq on 23/01/2017.
  */
 
 public class SplashActivity extends BaseActivity implements SplashConnector,PermissionConnector {

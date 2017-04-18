@@ -11,7 +11,7 @@ import com.java.mvp.mvpandroid.helper.Language;
 import com.java.mvp.mvpandroid.internal.AppModule;
 import com.java.mvp.mvpandroid.internal.DaggerGraph;
 import com.java.mvp.mvpandroid.internal.Graph;
-import com.java.mvp.mvpandroid.repository.PreferencesRepository;
+import com.java.mvp.mvpandroid.repository.ConcealRepository;
 
 import java.util.UUID;
 
@@ -23,20 +23,20 @@ public class MVPApplication extends Application {
 
     private Graph mGraph;
 
-    PreferencesRepository preferencesRepository;
+    ConcealRepository preferencesRepository;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        FacebookSdk.sdkInitialize(getApplicationContext());
-        AppEventsLogger.activateApp(this);
+//        FacebookSdk.sdkInitialize(getApplicationContext());
+//        AppEventsLogger.activateApp(this);
 
         setGraph(DaggerGraph.builder()
                 .appModule(new AppModule(this))
                 .build());
 
-        preferencesRepository = new PreferencesRepository(this);
+        preferencesRepository = new ConcealRepository(this);
 
         if (preferencesRepository.getLanguage() == null)
             preferencesRepository.changeLanguage(Language.ENGLISH,this);

@@ -8,12 +8,12 @@ import android.util.Log;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.java.mvp.mvpandroid.MVPApplication;
 import com.java.mvp.mvpandroid.internal.ServiceModule;
-import com.java.mvp.mvpandroid.repository.PreferencesRepository;
+import com.java.mvp.mvpandroid.repository.ConcealRepository;
 
 import javax.inject.Inject;
 
 /**
- * Created by hafiq on 25/10/2016.
+ * @author : hafiq on 25/10/2016.
  */
 
 public class RegistrationIntentService extends IntentService {
@@ -23,7 +23,7 @@ public class RegistrationIntentService extends IntentService {
     public static final String ACTION_TOKEN = "TOKEN_RESPONSE";
 
     @Inject
-    protected PreferencesRepository user;
+    protected ConcealRepository user;
 
     public RegistrationIntentService() {
         super(TAG);

@@ -7,7 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 
 import com.java.mvp.mvpandroid.internal.PerActivity;
-import com.java.mvp.mvpandroid.repository.PreferencesRepository;
+import com.java.mvp.mvpandroid.repository.ConcealRepository;
 import com.java.mvp.mvpandroid.services.RegistrationIntentService;
 
 import com.mvp.client.entity.request.TokenRequest;
@@ -28,14 +28,14 @@ import io.reactivex.schedulers.Schedulers;
 public class SplashPresenter {
 
     private final SplashManager manager;
-    private final PreferencesRepository preferences;
+    private final ConcealRepository preferences;
     private SplashConnector mView;
     private final CompositeDisposable mSubscription = new CompositeDisposable();
 
     private TokenBroadCastService tokenBroadcastReceiver;
 
     @Inject
-    SplashPresenter(SplashManager manager, PreferencesRepository preferences) {
+    SplashPresenter(SplashManager manager, ConcealRepository preferences) {
         this.manager = manager;
         this.preferences = preferences;
         tokenBroadcastReceiver = new TokenBroadCastService();
