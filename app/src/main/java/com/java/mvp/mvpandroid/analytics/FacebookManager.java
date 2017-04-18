@@ -9,7 +9,7 @@ import com.facebook.appevents.AppEventsLogger;
  * @author : hafiq on 26/01/2017.
  */
 
-public class FacebookManager implements AnalyticView {
+class FacebookManager implements AnalyticView {
 
     private Context context;
 //    private AppEventsLogger logger;

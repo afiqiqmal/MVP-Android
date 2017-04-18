@@ -25,7 +25,7 @@ import javax.inject.Singleton;
  * @author Basyrun Halim
  */
 @Singleton
-public class PreferencesRepository {
+public class ConcealRepository {
 
     private static final String KEY_PUSH_TOKEN = "push_token";
     private static final String KEY_PUSH_TOKEN_SENT = "push_token_sent";
@@ -55,7 +55,7 @@ public class PreferencesRepository {
 
     @SuppressLint("CommitPrefEdits")
     @Inject
-    public PreferencesRepository(Context context) {
+    public ConcealRepository(Context context) {
         mContext = context;
         concealPrefRepository = new ConcealPrefRepository.PreferencesBuilder(mContext)
                 .useDefaultPrefStorage()

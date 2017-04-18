@@ -11,7 +11,7 @@ import com.google.firebase.analytics.FirebaseAnalytics;
  * Created by hafiq on 23/01/2017.
  */
 
-public class FirebaseManager implements AnalyticView {
+class FirebaseManager implements AnalyticView {
 
     Context context;
     public FirebaseManager(Context context){
