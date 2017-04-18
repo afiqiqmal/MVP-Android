@@ -5,6 +5,8 @@ import android.content.Context;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
 
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
 import com.java.mvp.mvpandroid.internal.AppModule;
 import com.java.mvp.mvpandroid.internal.DaggerGraph;
 import com.java.mvp.mvpandroid.internal.Graph;
@@ -22,6 +24,9 @@ public class MVPApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        AppEventsLogger.activateApp(this);
 
         setGraph(DaggerGraph.builder()
                 .appModule(new AppModule(this))

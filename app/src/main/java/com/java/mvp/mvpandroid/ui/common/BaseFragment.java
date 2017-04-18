@@ -44,7 +44,6 @@ import io.reactivex.disposables.Disposable;
 public class BaseFragment extends Fragment {
 
     protected List<Disposable> mSubscriptions;
-    protected boolean mIsSubscriber = false;
 
     protected Unbinder unbinder;
 
@@ -66,7 +65,6 @@ public class BaseFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        FacebookSdk.sdkInitialize(getActivity());
 
         activityGraph().inject(this);
     }
