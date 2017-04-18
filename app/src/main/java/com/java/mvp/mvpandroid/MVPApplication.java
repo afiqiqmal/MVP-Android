@@ -7,9 +7,11 @@ import android.telephony.TelephonyManager;
 
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
+import com.java.mvp.mvpandroid.helper.Language;
 import com.java.mvp.mvpandroid.internal.AppModule;
 import com.java.mvp.mvpandroid.internal.DaggerGraph;
 import com.java.mvp.mvpandroid.internal.Graph;
+import com.java.mvp.mvpandroid.repository.PreferencesRepository;
 
 import java.util.UUID;
 
@@ -21,6 +23,8 @@ public class MVPApplication extends Application {
 
     private Graph mGraph;
 
+    PreferencesRepository preferencesRepository;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -31,6 +35,15 @@ public class MVPApplication extends Application {
         setGraph(DaggerGraph.builder()
                 .appModule(new AppModule(this))
                 .build());
+
+        preferencesRepository = new PreferencesRepository(this);
+
+        if (preferencesRepository.getLanguage() == null)
+            preferencesRepository.changeLanguage(Language.ENGLISH,this);
+        else{
+            preferencesRepository.changeLanguage(preferencesRepository.getLanguage(),this);
+        }
+
     }
 
 
