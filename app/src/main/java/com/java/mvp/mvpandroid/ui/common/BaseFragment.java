@@ -10,6 +10,7 @@ import android.view.View;
 
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
+import com.java.mvp.mvpandroid.BuildConfig;
 import com.java.mvp.mvpandroid.MVPApplication;
 import com.java.mvp.mvpandroid.R;
 import com.java.mvp.mvpandroid.analytics.AnalyticHelper;
@@ -20,12 +21,15 @@ import com.java.mvp.mvpandroid.permission.RequestMultiplePermissionListener;
 import com.java.mvp.mvpandroid.permission.RequestSinglePermissionListener;
 import com.java.mvp.mvpandroid.repository.PreferencesRepository;
 import com.java.mvp.mvpandroid.utils.ErrorUtils;
+import com.java.mvp.mvpandroid.utils.ProgressDialogUtils;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.multi.DialogOnAnyDeniedMultiplePermissionsListener;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.karumi.dexter.listener.single.DialogOnDeniedPermissionListener;
 import com.karumi.dexter.listener.single.PermissionListener;
+import com.logger.min.easylogger.Logger;
+import com.mvp.client.internal.Constant;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -57,6 +61,9 @@ public class BaseFragment extends Fragment {
     protected AnalyticHelper analyticHelper;
 
     @Inject
+    protected ProgressDialogUtils progress;
+
+    @Inject
     protected RequestSinglePermissionListener feedbackViewPermissionListener;
 
     @Inject
@@ -65,6 +72,8 @@ public class BaseFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        new Logger.Builder(getActivity()).setTag(Constant.TAG).enableLog(BuildConfig.DEBUG).create();
 
         activityGraph().inject(this);
     }

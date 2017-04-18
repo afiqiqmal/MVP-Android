@@ -89,7 +89,7 @@ public class AppModule {
             return new OkHttpClient.Builder()
                     .addInterceptor(new HeaderInterceptor(u))
                     .cache(cache)
-                    .addNetworkInterceptor(new CacheInterceptor())
+                    .addNetworkInterceptor(new CacheInterceptor(mContext))
                     .connectTimeout(Constant.CONNECTTIMEOUT, TimeUnit.SECONDS)
                     .readTimeout(Constant.READTIMEOUT, TimeUnit.SECONDS)
                     .writeTimeout(Constant.WRITETIMEOUT, TimeUnit.SECONDS)
@@ -116,60 +116,5 @@ public class AppModule {
     @Singleton
     public PreferencesRepository providePrefences(Context context) {
         return new PreferencesRepository(context);
-    }
-
-    private class HeaderInterceptor implements Interceptor {
-
-        private PreferencesRepository mPrefs;
-        private String mAuth;
-
-        public HeaderInterceptor(PreferencesRepository p) {
-            mPrefs = p;
-        }
-
-        @Override
-        public Response intercept(Chain chain) throws IOException {
-
-            if (mPrefs.getAuthToken() != null) {
-                mAuth = mPrefs.getAuthToken();
-            } else {
-                mAuth = "";
-            }
-
-            Request r = chain.request()
-                    .newBuilder()
-                    .addHeader(Constant.HEADER_ACCEPT, Constant.APP_HEADER)
-                    .addHeader(Constant.HEADER_CONTENT_TYPE, Constant.APP_HEADER)
-                    .addHeader(Constant.HEADER_AUTHORIZE, Constant.AUTH + mAuth)
-                    .build();
-
-            return chain.proceed(r);
-        }
-    }
-
-    private class CacheInterceptor implements Interceptor{
-
-        @Override
-        public Response intercept(Chain chain) throws IOException {
-
-            Request request = chain.request();
-
-            if (request.method().equals("GET")) {
-                if (DeviceUtils.isConnected(mContext)) {
-                    request = request.newBuilder()
-                            .header(Constant.CACHE_CONTROL, "only-if-cached")
-                            .build();
-                } else {
-                    request = request.newBuilder()
-                            .header(Constant.CACHE_CONTROL, "public, max-stale=2419200")
-                            .build();
-                }
-            }
-
-            Response originalResponse = chain.proceed(request);
-            return originalResponse.newBuilder()
-                    .header(Constant.CACHE_CONTROL, "max-age=600")
-                    .build();
-        }
     }
 }
