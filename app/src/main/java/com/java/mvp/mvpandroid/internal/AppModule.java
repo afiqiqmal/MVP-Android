@@ -102,7 +102,7 @@ public class AppModule {
     @Provides
     @Singleton
     public RestApi provideRestApi(OkHttpClient client, Gson g) {
-
+        g = new GsonBuilder().setLenient().create();
         retrofit = new Retrofit.Builder()
                 .baseUrl(new BaseCryptUtils.Builder(mContext).decodeStringWithIteration(BuildConfig.URL_API))
                 .addConverterFactory(GsonConverterFactory.create(g))
