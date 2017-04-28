@@ -12,4 +12,24 @@
         <item name="android:statusBarColor" tools:targetApi="lollipop">@color/md_orange_400</item>
     </style>
 
+    <style name="FontBold" parent="android:TextAppearance">
+        <item name="fontPath">fonts/avenir-next-bold.ttf</item>
+        <item name="android:textColor">@color/md_blue_700</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="FontNormal" parent="android:TextAppearance">
+        <item name="fontPath">fonts/avenir-next-regular.ttf</item>
+        <item name="android:textColor">@color/md_black_1000</item>
+    </style>
+
+    <style name="FontMedium" parent="android:TextAppearance">
+        <item name="fontPath">fonts/avenir-next-medium.ttf</item>
+    </style>
+
+    <style name="FontNormalHint" parent="android:TextAppearance">
+        <item name="fontPath">fonts/avenir-next-regular.ttf</item>
+        <item name="android:textColorHint">@color/md_grey_700</item>
+    </style>
+
 </resources>

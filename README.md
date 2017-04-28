@@ -39,9 +39,16 @@ In an application with a good layered architecture, this model would only be the
 - RxJava2
 - Retrofit2
 - Dagger
+- Gson
+- GoogleMap
+- Facebook/Firebase/Google
 - Butterknife
 - Ice Pick
+- Glide
 - Dexter (Permission)
+- Calligraphy
+- EzyLogger
+- ConcealSharedPreferences
 
 
 This project already setup firebase analytics. just replace the <b>google-service.json</b> with your json file.

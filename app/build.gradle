@@ -233,8 +233,11 @@ dependencies {
     //Image Rendering
     compile libraries.glide
 
-    //permission helper
-    compile 'com.karumi:dexter:3.0.2'
+    //Dexter Permission
+    compile libraries.dexter
+
+    //Caligraphy
+    compile 'uk.co.chrisjenx:calligraphy:2.2.0'
 
     //Logger
     compile 'com.github.afiqiqmal:EzyLogger:1.1.0'
