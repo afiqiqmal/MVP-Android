@@ -1,0 +1,66 @@
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile project(':app-client');
+    testCompile 'junit:junit:4.12'
+
+    // Android Support
+    compile libraries.design
+    compile libraries.cardView
+    compile libraries.appCompat
+    compile libraries.supportV4
+
+
+    // Google Play
+    compile libraries.googleMap
+    compile libraries.googleLocation
+
+
+    //Login
+    compile libraries.googlePlus
+    compile libraries.facebook
+
+    // Json
+    compile libraries.googleGson
+
+    // Firebase
+    compile libraries.firebaseAnalytic
+    compile libraries.firebasegcm
+    compile libraries.firebaseCrash
+    compile libraries.firebaseAuth
+
+    // Dagger
+    compile libraries.dagger
+    annotationProcessor libraries.daggerCompiler
+    provided libraries.javaAnnotations
+
+    // Icepick
+    compile libraries.icepick
+    provided libraries.icepickProcessor
+
+    // RxAndroid
+    compile libraries.rxAndroid
+
+    compile libraries.butterknife
+    annotationProcessor libraries.butterknifeCompiler
+
+    //Image Rendering
+    compile libraries.glide
+
+    //Dexter Permission
+    compile libraries.dexter
+
+    //Caligraphy
+    compile 'uk.co.chrisjenx:calligraphy:2.2.0'
+
+    //Logger
+    compile 'com.github.afiqiqmal:EzyLogger:1.1.0'
+
+    //Preferences
+    compile 'com.github.afiqiqmal:ConcealSharedPreference-Android:1.1.5'
+
+    compile ('uk.co.chrisjenx:calligraphy:2.2.0'){
+        exclude group: 'com.android.support', module: 'appcompat-v7'
+        transitive = false
+    }
+
+}

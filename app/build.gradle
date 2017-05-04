@@ -3,10 +3,13 @@ import java.text.SimpleDateFormat
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
+
 apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
 //apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'com.jakewharton.butterknife'
+apply from : 'dependencies.gradle'
+apply from : 'signing.gradle'
 
 def getDateTime() {
     DateFormat df = new SimpleDateFormat("yyyyMMdd");
@@ -109,27 +112,12 @@ android {
         multiDexEnabled true
     }
 
-
-    signingConfigs {
-
-        release {
-            storeFile file('../mvp-keystore.jks')
-            storePassword ""
-            keyAlias ""
-            keyPassword ""
-        }
-
-        debug{
-        }
-    }
-
     buildTypes {
 
         debug {
             testCoverageEnabled true
             versionNameSuffix "-staging"
             minifyEnabled false
-
             buildConfigField 'String','URL_API',getEncryptKey(getApi())
         }
 
@@ -137,8 +125,6 @@ android {
             zipAlignEnabled true
             minifyEnabled true
             shrinkResources true
-
-            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
             buildConfigField 'String','URL_API',getEncryptKey(getApi())
@@ -148,6 +134,12 @@ android {
             variant.outputs.each { output ->
                 def finalName = "mvp-" + variant.versionName + "-" + variant.productFlavors[0].name + "-" + variant.buildType.name + "-" + getDateTime() + ".apk";
                 output.outputFile = new File(output.outputFile.parent, finalName)
+            }
+        }
+
+        android.variantFilter { variant ->
+            if (variant.buildType.name == 'release' && variant.getFlavors().get(0).name == 'mock') {
+                variant.setIgnore(true);
             }
         }
     }
@@ -183,68 +175,6 @@ android {
         exclude 'META-INF/dependencies.txt'
         exclude 'META-INF/LGPL2.1'
     }
-}
-
-dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile project(':app-client');
-    testCompile 'junit:junit:4.12'
-
-    // Android Support
-    compile libraries.design
-    compile libraries.cardView
-    compile libraries.appCompat
-    compile libraries.supportV4
-
-
-    // Google Play
-    compile libraries.googleMap
-    compile libraries.googleLocation
-
-
-    //Login
-    compile libraries.googlePlus
-    compile libraries.facebook
-
-    // Json
-    compile libraries.googleGson
-
-    // Firebase
-    compile libraries.firebaseAnalytic
-    compile libraries.firebasegcm
-    compile libraries.firebaseCrash
-    compile libraries.firebaseAuth
-
-    // Dagger
-    compile libraries.dagger
-    annotationProcessor libraries.daggerCompiler
-    provided libraries.javaAnnotations
-
-    // Icepick
-    compile libraries.icepick
-    provided libraries.icepickProcessor
-
-    // RxAndroid
-    compile libraries.rxAndroid
-
-    compile libraries.butterknife
-    annotationProcessor libraries.butterknifeCompiler
-
-    //Image Rendering
-    compile libraries.glide
-
-    //Dexter Permission
-    compile libraries.dexter
-
-    //Caligraphy
-    compile 'uk.co.chrisjenx:calligraphy:2.2.0'
-
-    //Logger
-    compile 'com.github.afiqiqmal:EzyLogger:1.1.0'
-
-    //Preferences
-    compile 'com.github.afiqiqmal:ConcealSharedPreference-Android:1.1.5'
-
 }
 
 configurations.all {
