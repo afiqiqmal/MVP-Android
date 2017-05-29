@@ -1,7 +1,7 @@
 package com.java.mvp.mvpandroid.analytics;
 
-import android.app.Activity;
 import android.content.Context;
+import android.os.Bundle;
 
 import com.facebook.appevents.AppEventsLogger;
 
@@ -12,16 +12,16 @@ import com.facebook.appevents.AppEventsLogger;
 class FacebookManager implements AnalyticView {
 
     private Context context;
-//    private AppEventsLogger logger;
+    private AppEventsLogger logger;
 
-    public FacebookManager(Context context){
+    FacebookManager(Context context){
         this.context = context;
-//        logger = AppEventsLogger.newLogger(context);
+        logger = AppEventsLogger.newLogger(context);
     }
 
     @Override
     public void sendScreenName(String name) {
-//        logger.logEvent(name);
+        logger.logEvent(name);
     }
 
     @Override
@@ -31,7 +31,7 @@ class FacebookManager implements AnalyticView {
 
     @Override
     public void sendUserIdProperties(String name) {
-
+        AppEventsLogger.setUserID(name);
     }
 
     @Override
@@ -40,7 +40,14 @@ class FacebookManager implements AnalyticView {
     }
 
     @Override
-    public void sendEvent(String category, String action) {
+    public void sendEvent(String name, String category, String string) {
+        Bundle bundle = new Bundle();
+        bundle.putString(category,string);
+        logger.logEvent(name,bundle);
+    }
 
+    @Override
+    public void sendEvent(String name, Bundle bundle) {
+        logger.logEvent(name,bundle);
     }
 }

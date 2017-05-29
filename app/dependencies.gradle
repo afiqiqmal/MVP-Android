@@ -22,6 +22,14 @@ dependencies {
     // Json
     compile libraries.googleGson
 
+    //Crashlytics
+    compile (libraries.fabric){
+        transitive = true;
+    }
+    compile (libraries.fabricAnswer){
+        transitive = true;
+    }
+
     // Firebase
     compile libraries.firebaseAnalytic
     compile libraries.firebasegcm
@@ -46,21 +54,19 @@ dependencies {
     //Image Rendering
     compile libraries.glide
 
-    //Dexter Permission
-    compile libraries.dexter
+    //Rx Permission
+    compile libraries.rxpermission
 
-    //Caligraphy
-    compile 'uk.co.chrisjenx:calligraphy:2.2.0'
+    //Font
+    compile (libraries.caligraphy){
+        exclude group: 'com.android.support', module: 'appcompat-v7'
+        transitive = false
+    }
 
     //Logger
     compile 'com.github.afiqiqmal:EzyLogger:1.1.0'
 
     //Preferences
     compile 'com.github.afiqiqmal:ConcealSharedPreference-Android:1.1.5'
-
-    compile ('uk.co.chrisjenx:calligraphy:2.2.0'){
-        exclude group: 'com.android.support', module: 'appcompat-v7'
-        transitive = false
-    }
 
 }

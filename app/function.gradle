@@ -1,0 +1,110 @@
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.regex.Matcher
+import java.util.regex.Pattern
+
+
+ext{
+    getDateTime = this.&getDateTime
+
+    getApi = this.&getApi
+    getGoogleApi = this.&getGoogleApi
+
+    getCurrentFlavor = this.&getCurrentFlavor
+    getCurrentBuildType = this.&currentBuildType
+    getEncryptKey = this.&getEncryptKey
+    verifyFlavor = this.&verifyFlavor
+}
+
+def getDateTime() {
+    DateFormat df = new SimpleDateFormat("yyyyMMdd");
+    return df.format(new Date());
+}
+
+def getApi() {
+    logger.debug("getting api url...")
+
+    String dApi = MVP_URL_API_DEBUG
+    String rApi = MVP_URL_API_PROD
+    return verifyFlavor(dApi,rApi);
+}
+
+def getGoogleApi(){
+    logger.debug("getting googleapi key...")
+
+    String dApi = MVP_GOOGLE_MAPS_API_DEBUG_KEY
+    String rApi = MVP_GOOGLE_MAPS_API_KEY
+    return verifyFlavor(dApi,rApi);
+}
+
+def verifyFlavor(String debugApi,String releaseApi){
+    if (getCurrentFlavor() == "prod") {
+        if(getCurrentBuildType() == "release"){
+            return releaseApi
+        }
+        else{
+            return debugApi
+        }
+    }
+    else if(getCurrentFlavor() == "mock"){
+        return debugApi
+    }
+    else {
+        logger.error("API is null")
+        return "NULL";
+    }
+}
+
+
+def getCurrentFlavor() {
+    Gradle gradle = getGradle()
+    String  tskReqStr = gradle.getStartParameter().getTaskRequests().toString()
+
+    Pattern pattern;
+
+    if( tskReqStr.contains( "assemble" ) )
+        pattern = Pattern.compile("assemble(\\w+)(Release|Debug)")
+    else
+        pattern = Pattern.compile("generate(\\w+)(Release|Debug)")
+
+    Matcher matcher = pattern.matcher( tskReqStr )
+
+    if( matcher.find() )
+        return matcher.group(1).toLowerCase()
+    else
+    {
+        println "NO MATCH FOUND"
+        return "";
+    }
+}
+
+def getCurrentBuildType() {
+    Gradle gradle = getGradle()
+    String  tskReqStr = gradle.getStartParameter().getTaskRequests().toString()
+
+    if (tskReqStr.contains("Release")) {
+        logger.debug("getCurrentBuildType release...")
+        return "release"
+    }
+    else if (tskReqStr.contains("generateDebug")) {
+        logger.debug("getCurrentBuildType debug...")
+        return "debug"
+    }
+
+    logger.error("build type not found")
+    return "";
+}
+
+def convertString(String str){
+    return "\""+str+"\"";
+}
+
+def getEncryptKey(String str){
+
+    byte[] aa = Base64.getEncoder().encode(str.getBytes("utf-8"))
+    byte[] bb = Base64.getEncoder().encode(aa)
+    byte[] cc = Base64.getEncoder().encode(bb)
+    byte[] dd = Base64.getEncoder().encode(cc)
+
+    return "\""+new String(dd)+"\"";
+}

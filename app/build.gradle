@@ -1,91 +1,11 @@
-import java.text.DateFormat
-import java.text.SimpleDateFormat
-import java.util.regex.Matcher
-import java.util.regex.Pattern
-
-
 apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
 //apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'com.jakewharton.butterknife'
+apply plugin: 'io.fabric'
 apply from : 'dependencies.gradle'
 apply from : 'signing.gradle'
-
-def getDateTime() {
-    DateFormat df = new SimpleDateFormat("yyyyMMdd");
-    return df.format(new Date());
-}
-
-def getApi() {
-    if (getCurrentFlavor() == "prod") {
-        if(getCurrentBuildType() == "release"){
-            return PROD_API
-        }
-        else{
-            return DEBUG_API
-        }
-    }
-    else if(getCurrentFlavor() == "mock"){
-        if(getCurrentBuildType() == "release"){
-            return PROD_API
-        }
-        else{
-            return DEBUG_API
-        }
-    }
-    else
-        return "NULL";
-}
-
-
-def getCurrentFlavor() {
-    Gradle gradle = getGradle()
-    String  tskReqStr = gradle.getStartParameter().getTaskRequests().toString()
-
-    Pattern pattern;
-
-    if( tskReqStr.contains( "assemble" ) )
-        pattern = Pattern.compile("assemble(\\w+)(Release|Debug)")
-    else
-        pattern = Pattern.compile("generate(\\w+)(Release|Debug)")
-
-    Matcher matcher = pattern.matcher( tskReqStr )
-
-    if( matcher.find() )
-        return matcher.group(1).toLowerCase()
-    else
-    {
-        println "NO MATCH FOUND"
-        return "";
-    }
-}
-
-def getCurrentBuildType() {
-    Gradle gradle = getGradle()
-    String  tskReqStr = gradle.getStartParameter().getTaskRequests().toString()
-
-    if (tskReqStr.contains("Release")) {
-        println "getCurrentBuildType release"
-        return "release"
-    }
-    else if (tskReqStr.contains("generateDebug")) {
-        println "getCurrentBuildType debug"
-        return "debug"
-    }
-
-    println "NO MATCH FOUND"
-    return "";
-}
-
-def getEncryptKey(String str){
-
-    byte[] aa = Base64.getEncoder().encode(str.getBytes("utf-8"))
-    byte[] bb = Base64.getEncoder().encode(aa)
-    byte[] cc = Base64.getEncoder().encode(bb)
-    byte[] dd = Base64.getEncoder().encode(cc)
-
-    return "\""+new String(dd)+"\"";
-}
+apply from : 'function.gradle'
 
 def versionMajor = 1
 def versionMinor = 0
@@ -110,6 +30,14 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         multiDexEnabled true
+    }
+
+    buildTypes.each{
+        it.resValue "string", "facebook_app_id", (project.findProperty("MVP_FACEBOOK_ID")?:"")
+        it.resValue "string", "facebook_auth", (project.findProperty("MVP_FACEBOOK_AUTH")?:"")
+        it.resValue "string", "fb_login_protocol_scheme", (project.findProperty("MVP_FACEBOOK_PROTOCOL")?:"")
+        it.resValue "string", "google_maps_key", getGoogleApi()
+        it.buildConfigField 'String','URL_API',getEncryptKey(getApi())
     }
 
     buildTypes {

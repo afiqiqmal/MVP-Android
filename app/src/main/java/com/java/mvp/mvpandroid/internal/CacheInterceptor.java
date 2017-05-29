@@ -17,32 +17,38 @@ import okhttp3.Response;
 
 public class CacheInterceptor implements Interceptor {
 
-    Context mContext;
+    private Context mContext;
+    private int durationCache = 60 * 60 * 24 * 7; // 1 week
+    private int cacheAge = 60; // 1 minutes
 
     public CacheInterceptor(Context context) {
         this.mContext = context;
+    }
+
+    public void setDurationCache(int durationCache) {
+        this.durationCache = durationCache;
+    }
+
+    public void setCacheAge(int cacheAge) {
+        this.cacheAge = cacheAge;
     }
 
     @Override
     public Response intercept(Chain chain) throws IOException {
 
         Request request = chain.request();
-
         if (request.method().equals("GET")) {
             if (DeviceUtils.isConnected(mContext)) {
                 request = request.newBuilder()
-                        .header(Constant.CACHE_CONTROL, "only-if-cached")
+                        .header(Constant.CACHE_CONTROL, "public, max-age=" + cacheAge)
                         .build();
             } else {
                 request = request.newBuilder()
-                        .header(Constant.CACHE_CONTROL, "public, max-stale=2419200")
+                        .header(Constant.CACHE_CONTROL, "public, only-if-cached, max-stale=" + durationCache)
                         .build();
             }
         }
 
-        Response originalResponse = chain.proceed(request);
-        return originalResponse.newBuilder()
-                .header(Constant.CACHE_CONTROL, "max-age=600")
-                .build();
+        return chain.proceed(request);
     }
 }

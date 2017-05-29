@@ -3,22 +3,20 @@
 buildscript {
     repositories {
         jcenter()
-        mavenCentral()
         maven { url 'https://maven.fabric.io/public' }
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
         maven { url 'https://plugins.gradle.org/m2/' }
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.1'
-//        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+        classpath 'com.android.tools.build:gradle:2.3.2'
         classpath 'com.jakewharton:butterknife-gradle-plugin:8.5.1'
         classpath 'me.tatarka:gradle-retrolambda:3.6.0'
         classpath 'net.ltgt.gradle:gradle-apt-plugin:0.9'
         classpath 'org.jacoco:org.jacoco.core:0.7.9'
         classpath 'com.stanfy.spoon:spoon-gradle-plugin:1.0.4'
         classpath 'com.google.gms:google-services:3.0.0'
-        classpath 'io.fabric.tools:gradle:1.21.7'
+        classpath 'io.fabric.tools:gradle:1.22.1'
 
         // Workaround for Lint + Retrolambda.
         classpath 'me.tatarka.retrolambda.projectlombok:lombok.ast:0.2.3.a2'
@@ -31,7 +29,6 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
-        mavenCentral()
         maven { url 'https://clojars.org/repo/' }
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
         maven { url 'https://maven.fabric.io/public' }
@@ -51,28 +48,30 @@ ext {
 
     // Android
     buildToolsVersion = '25.0.2'
-    minSdkVersion = 17
+    minSdkVersion = 16
     targetSdkVersion = 25
     compileSdkVersion = 25
 
     // Libraries
     androidSupportVersion = '25.3.1'
-    googlePlayVersion = '10.2.1'
+    googlePlayVersion = '10.2.4'
     retrofitVersion = '2.2.0'
-    rxJavaVersion = '2.0.8'
+    retrofitLoggingVersion = '3.7.0'
+    rxJavaVersion = '2.1.0'
     rxAndroidVersion = '2.0.1'
     daggerVersion = '2.10'
     javaAnnotationsVersion = '1.0'
-    stethoVersion = '1.4.2'
+    stethoVersion = '1.5.0'
     icepickVersion = '3.2.0'
     espressoVersion = '2.2.1'
     mockitoVersion = '1.10.19'
     dexmakerVersion = '1.4'
     butterknife = '8.5.1'
     gsonVersion = '2.8.0'
-    glideVersion = '3.7.0'
+    moshiVersion = '1.5.0'
+    glideVersion = '3.8.0'
     apacheCommonVersion = '3.4'
-    facebookVersion = '4.19.0'
+    facebookVersion = '4.22.0'
     dexterVersion = '3.0.2'
 
     libraries = [
@@ -93,21 +92,27 @@ ext {
             googleLocation: "com.google.android.gms:play-services-location:${googlePlayVersion}",
             googlePlus: "com.google.android.gms:play-services-auth:${googlePlayVersion}",
 
-            //facebook
-            facebook: "com.facebook.android:facebook-android-sdk:${facebookVersion}",
-
-            // Json
-            googleGson: "com.google.code.gson:gson:${gsonVersion}",
-
             // Firebase
             firebasegcm: "com.google.firebase:firebase-messaging:${googlePlayVersion}",
             firebaseAnalytic:"com.google.firebase:firebase-core:${googlePlayVersion}",
             firebaseCrash:"com.google.firebase:firebase-crash:${googlePlayVersion}",
             firebaseAuth:"com.google.firebase:firebase-auth:${googlePlayVersion}",
 
+            //facebook
+            facebook: "com.facebook.android:facebook-android-sdk:${facebookVersion}",
+
+            // Json
+            googleGson: "com.google.code.gson:gson:${gsonVersion}",
+            moshi: "com.squareup.moshi:moshi:${moshiVersion}",
+
+            //CrashLytics
+            fabric: "com.crashlytics.sdk.android:crashlytics:2.6.8@aar",
+            fabricAnswer: "com.crashlytics.sdk.android:answers:1.3.13@aar",
+
             // RxJava
             rxJava: "io.reactivex.rxjava2:rxjava:${rxJavaVersion}",
             rxAndroid: "io.reactivex.rxjava2:rxandroid:${rxAndroidVersion}",
+
             // Dagger
             dagger: "com.google.dagger:dagger:${daggerVersion}",
             daggerCompiler: "com.google.dagger:dagger-compiler:${daggerVersion}",
@@ -122,11 +127,18 @@ ext {
             retrofitGsonConverter: "com.squareup.retrofit2:converter-gson:${retrofitVersion}",
             retrofitRxJavaAdapter: "com.squareup.retrofit2:adapter-rxjava2:${retrofitVersion}",
 
+            //HTTP Logging
+            retrofitLogInterceptor: "com.squareup.okhttp3:logging-interceptor:${retrofitLoggingVersion}",
+
             //Apache Commons
             commonlang: "org.apache.commons:commons-lang3:${apacheCommonVersion}",
 
-            //Dexter Permission
+            //Permission
             dexter: "com.karumi:dexter:${dexterVersion}",
+            rxpermission: "com.tbruyelle.rxpermissions2:rxpermissions:0.9.4@aar",
+
+            //Font
+            caligraphy: "uk.co.chrisjenx:calligraphy:2.2.0",
 
             // Misc
             timber: 'com.jakewharton.timber:timber:4.1.2',

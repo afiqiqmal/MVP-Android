@@ -2,21 +2,23 @@ package com.java.mvp.mvpandroid;
 
 import android.app.Application;
 import android.content.Context;
-import android.provider.Settings;
-import android.telephony.TelephonyManager;
 
+import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.core.CrashlyticsCore;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.java.mvp.mvpandroid.helper.Language;
 import com.java.mvp.mvpandroid.internal.AppModule;
 import com.java.mvp.mvpandroid.internal.DaggerGraph;
 import com.java.mvp.mvpandroid.internal.Graph;
 import com.java.mvp.mvpandroid.repository.ConcealRepository;
 
-import java.util.UUID;
+import io.fabric.sdk.android.Fabric;
 
 /**
- * Created by hafiq on 23/01/2017.
+ * @author : hafiq on 23/01/2017.
  */
 
 public class MVPApplication extends Application {
@@ -29,8 +31,7 @@ public class MVPApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-//        FacebookSdk.sdkInitialize(getApplicationContext());
-//        AppEventsLogger.activateApp(this);
+        appInit();
 
         setGraph(DaggerGraph.builder()
                 .appModule(new AppModule(this))
@@ -46,6 +47,15 @@ public class MVPApplication extends Application {
 
     }
 
+    private void appInit(){
+//        FacebookSdk.sdkInitialize(getApplicationContext());
+//        AppEventsLogger.activateApp(this);
+
+//        Crashlytics crashlyticsKit = new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build();
+//        Fabric.with(this, crashlyticsKit,new Answers());
+
+        FirebaseAnalytics.getInstance(this).setAnalyticsCollectionEnabled(BuildConfig.DEBUG);
+    }
 
     public Graph getGraph() {
         return mGraph;
