@@ -38,10 +38,7 @@ android {
     buildTypes.each{
         it.resValue "string", "google_maps_key", getGoogleApi()
         it.buildConfigField 'String','URL_API',getEncryptKey(getApi())
-        it.buildConfigField 'String','CLIENT_SERVICE',getEncryptKey(getClientService())
         it.buildConfigField 'String','SECRET_KEY',getEncryptKey(getClientSecretKey())
-        it.buildConfigField 'String','X_POWERED_BY',getEncryptKey(getClientPowerByHeader())
-        it.buildConfigField 'String','BEPUNCT', '"'+appName+'"'
     }
 
     buildTypes {

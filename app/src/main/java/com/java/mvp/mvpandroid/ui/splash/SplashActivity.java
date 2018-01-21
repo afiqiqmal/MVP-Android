@@ -148,7 +148,6 @@ public class SplashActivity extends BaseActivity implements SplashConnector {
     @Override
     protected void onResume() {
         super.onResume();
-//        analyticHelper.sendScreenName(Screen.SPLASHSCREEN);
-
+        analyticHelper.sendScreenName(Screen.SPLASHSCREEN);
     }
 }
