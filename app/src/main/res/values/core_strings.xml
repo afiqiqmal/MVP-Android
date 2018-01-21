@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MVP</string>
+    <string name="mobile_os">android</string>
+
+
+    <string name="play_services_warning">You need to Update Google Play Services in order to use this app</string>
+    <string name="google_service_update">Please Update Google Play Services in order to use this app.</string>
+
+    <string name="unknown_error_msg">Opps.. Something went wrong…</string>
+    <string name="slow_internet">Slow Internet Connection. Please Try Again</string>
+    <string name="internet_not_connected">Make Sure Your Internet Connection is Properly</string>
+    <string name="server_problem">Server Connection Problem. Please Try Again</string>
+
+
+    <string name="permission_text">Permission</string>
+    <string name="permission_explain2_text">You are not able to proceed if you not allow those permission</string>
+    <string name="request_again_text">Request Again?</string>
+    <string name="no_text">No</string>
+    <string name="attention_text">Attention</string>
+    <string name="permission_explain_text">This permissions is needed for doing fancy stuff, so please, allow it!!!</string>
+
+    <string name="placeholder_dot">...</string>
+    <string name="loading_applying">Applying...</string>
+    <string name="button_submit">Submit</string>
+</resources>

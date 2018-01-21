@@ -1,19 +1,18 @@
 package com.java.mvp.mvpandroid.services;
 
 import android.app.IntentService;
-import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.java.mvp.mvpandroid.MVPApplication;
-import com.java.mvp.mvpandroid.internal.ServiceModule;
-import com.java.mvp.mvpandroid.repository.ConcealRepository;
+import com.java.mvp.mvpandroid.internal.service.ServiceModule;
+import com.java.mvp.mvpandroid.repository.PreferencesRepository;
 
 import javax.inject.Inject;
 
 /**
- * @author : hafiq on 25/10/2016.
+ * @author : hafiq on 07/02/2017.
  */
 
 public class RegistrationIntentService extends IntentService {
@@ -23,7 +22,7 @@ public class RegistrationIntentService extends IntentService {
     public static final String ACTION_TOKEN = "TOKEN_RESPONSE";
 
     @Inject
-    protected ConcealRepository user;
+    protected PreferencesRepository user;
 
     public RegistrationIntentService() {
         super(TAG);
@@ -32,7 +31,7 @@ public class RegistrationIntentService extends IntentService {
     @Override
     public void onCreate() {
         super.onCreate();
-        MVPApplication.graph(this).serviceGraph(new ServiceModule(this)).inject(this);
+        MVPApplication.daggerAppComponent(this).serviceComponent(new ServiceModule(this)).inject(this);
     }
 
     @Override
@@ -46,7 +45,6 @@ public class RegistrationIntentService extends IntentService {
             token = iid.getToken();
         }
 
-        Log.i("TOKEN","==>"+token);
 
         Intent response = new Intent();
         response.putExtra(TOKEN,token);
@@ -63,11 +61,6 @@ public class RegistrationIntentService extends IntentService {
         user.savePushToken(token);
 
         sendRegistrationToServer(token);
-    }
-
-    public static void start(Context context) {
-        Intent intent = new Intent(context, RegistrationIntentService.class);
-        context.startService(intent);
     }
 
     private void sendRegistrationToServer(String token) {

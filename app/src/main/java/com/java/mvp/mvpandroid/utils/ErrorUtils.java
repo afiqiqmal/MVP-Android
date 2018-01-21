@@ -1,14 +1,18 @@
 package com.java.mvp.mvpandroid.utils;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.google.firebase.crash.FirebaseCrash;
+import com.crashlytics.android.Crashlytics;
+import com.google.gson.Gson;
+import com.java.mvp.mvpandroid.R;
+import com.java.mvp.mvpandroid.repository.PreferencesRepository;
+import com.mvp.client.entity.response.ErrorResponse;
 import com.mvp.client.internal.Constant;
 
 import java.net.ConnectException;
-import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 
@@ -17,39 +21,72 @@ import javax.inject.Singleton;
 import javax.net.ssl.SSLHandshakeException;
 import javax.net.ssl.SSLPeerUnverifiedException;
 
+import okhttp3.ResponseBody;
 import retrofit2.HttpException;
 import retrofit2.Response;
 
 /**
- * Created by hafiq on 23/01/2017.
+ * @author : hafiq on 23/01/2017.
  */
 
 @Singleton
 public class ErrorUtils {
 
     private Context mContext;
+    private boolean LOG = false;
+    private Throwable throwable;
+
+    private PreferencesRepository preferencesRepository;
 
     @Inject
+    public ErrorUtils(Context context, PreferencesRepository preferencesRepository){
+        this.mContext = context;
+        this.preferencesRepository = preferencesRepository;
+    }
+
     public ErrorUtils(Context context){
         this.mContext = context;
     }
 
     public void checkError(Throwable e){
         try {
+            throwable = e;
             e.printStackTrace();
-            firebaseReportError(e);
+            Crashlytics.logException(e);
 
             if (e instanceof HttpException) {
                 int code = getHttpErrorCode(e);
-                httpMessage(code);
-            } else if (e instanceof ConnectException || e instanceof SocketException || e instanceof SocketTimeoutException) {
-                showToast("No Internet Connection Found");
-            } else if (e instanceof UnknownHostException) {
-                showToast("Make Sure Your Internet Connection is Properly");
+
+                try {
+                    ResponseBody responseBody = ((HttpException) e).response().errorBody();
+                    assert responseBody != null;
+                    ErrorResponse response = new Gson().fromJson(responseBody.string(), ErrorResponse.class);
+                    httpMessage(response.getMessage());
+
+                    if (response.isShould_quit()) {
+                        if(preferencesRepository != null) {
+                            preferencesRepository.getPref().clearPrefs();
+                        }
+                    }
+                    else if (response.isShould_login()) {
+                        if(preferencesRepository != null) {
+                            preferencesRepository.getPref().clearPrefs();
+                        }
+                    }
+
+                } catch (Exception en) {
+                    en.printStackTrace();
+                    httpMessage(code);
+                }
+
+            } else if (e instanceof ConnectException) {
+                showToast(mContext.getString(R.string.slow_internet));
+            } else if (e instanceof UnknownHostException || e instanceof SocketTimeoutException) {
+                showToast(mContext.getString(R.string.internet_not_connected));
             } else if (e instanceof SSLHandshakeException || e instanceof SSLPeerUnverifiedException) {
-                showToast("Server Connection Problem. Please Try Again");
+                showToast(mContext.getString(R.string.server_problem));
             } else {
-                showErrorLog("Opps.. Something went wrong...");
+                showToast(mContext.getString(R.string.unknown_error_msg));
             }
         }
         catch (Exception err){
@@ -57,27 +94,30 @@ public class ErrorUtils {
         }
     }
 
-    public int getHttpErrorCode(Throwable e){
+    private int getHttpErrorCode(Throwable e){
         Response body = ((HttpException) e).response();
         return body.code();
     }
 
+    private void httpMessage(String custom) {
+        showToast(custom);
+    }
     //only common http error
     private void httpMessage(int code){
         if (code == 400){
             showToast("Bad Request");
         }
         else if (code == 401) {
-            showToast("Not Authorized Access");
+            showToast("No Authorize Access");
         }
         else if (code == 403) {
             showToast("Forbidden Access");
         }
         else if (code == 404) {
-            showToast("Data not Found");
+            showToast("Request Not Found");
         }
         else if (code == 405) {
-            showToast("Request not allowed");
+            showToast("Request Not Allowed");
         }
         else if (code == 407){
             showToast("Proxy Authentication Required");
@@ -100,16 +140,26 @@ public class ErrorUtils {
     }
 
     private void showToast(String message){
-        if (mContext!=null) {
-            Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+        if (!LOG) {
+            if (mContext != null) {
+                Toast.makeText(mContext, message, Toast.LENGTH_LONG).show();
+            }
         }
+        showErrorLog(message+": "+throwable.getMessage());
     }
 
     private void showErrorLog(String message){
-        Log.e(Constant.TAG,message);
+        Log.e(Constant.ERROR_TAG,message);
     }
 
-    public void firebaseReportError(Throwable e){
-        FirebaseCrash.report(e);
+    public void recordError(Throwable e){
+        try {
+            e.printStackTrace();
+            Crashlytics.logException(e);
+            Crashlytics.log(e.getMessage());
+        }
+        catch (Exception ex){
+            ex.printStackTrace();
+        }
     }
 }

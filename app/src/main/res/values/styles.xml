@@ -1,35 +1,42 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/md_orange_400</item>
         <item name="colorAccent">@color/md_orange_400</item>
+        <item name="colorControlNormal">@color/md_white_1000</item>
+        <item name="android:statusBarColor">@color/md_orange_400</item>
+        <item name="android:windowContentTransitions">true</item>
     </style>
 
-    <style name="AppTheme.Light" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">@color/md_orange_400</item>
-        <item name="colorAccent">@color/md_orange_400</item>
-        <item name="android:statusBarColor" tools:targetApi="lollipop">@color/md_orange_400</item>
+    <style name="AlertDialogCustom" parent="android:Theme.Material.Light.Dialog.Alert">
+        <item name="android:colorPrimary">@color/md_orange_400</item>
+        <item name="android:colorAccent">@color/md_orange_400</item>
     </style>
 
-    <style name="FontBold" parent="android:TextAppearance">
-        <item name="fontPath">fonts/avenir-next-bold.ttf</item>
-        <item name="android:textColor">@color/md_blue_700</item>
-        <item name="android:textStyle">bold</item>
+    <style name="AlertDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="buttonBarNegativeButtonStyle">@color/md_orange_400</item>
+        <item name="buttonBarPositiveButtonStyle">@color/md_orange_400</item>
     </style>
 
-    <style name="FontNormal" parent="android:TextAppearance">
-        <item name="fontPath">fonts/avenir-next-regular.ttf</item>
-        <item name="android:textColor">@color/md_black_1000</item>
+    <style name="FontBold">
+        <item name="fontPath">@string/font_bold</item>
     </style>
 
-    <style name="FontMedium" parent="android:TextAppearance">
-        <item name="fontPath">fonts/avenir-next-medium.ttf</item>
+    <style name="FontBold.Button" parent="Base.Widget.AppCompat.Button.Borderless">
+        <item name="fontPath">@string/font_bold</item>
+        <item name="android:background">?android:attr/borderlessButtonStyle</item>
     </style>
 
-    <style name="FontNormalHint" parent="android:TextAppearance">
-        <item name="fontPath">fonts/avenir-next-regular.ttf</item>
-        <item name="android:textColorHint">@color/md_grey_700</item>
+    <style name="FontRegular">
+        <item name="fontPath">@string/font_regular</item>
+    </style>
+
+    <style name="FontMedium">
+        <item name="fontPath">@string/font_medium</item>
+    </style>
+
+    <style name="FontThin">
+        <item name="fontPath">@string/font_thin</item>
     </style>
 
 </resources>

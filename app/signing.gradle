@@ -1,7 +1,7 @@
-def alias = System.getenv('MVP_KEY_ALIAS') ?: MVP_KEY_ALIAS
-def key_password = System.getenv('MVP_KEY_PASSWORD') ?: MVP_KEY_PASSWORD
-def store_password = System.getenv('MVP_STORE_PASSWORD') ?: MVP_STORE_PASSWORD
-def store_file = System.getenv('MVP_KEY_STORE_FILE') ?: MVP_KEY_STORE_FILE
+def alias = project.findProperty('BEPUNCT_KEY_ALIAS') ?: TERATO_KEY_ALIAS
+def key_password = project.findProperty('BEPUNCT_KEY_PASSWORD') ?: TERATO_KEY_PASSWORD
+def store_password = project.findProperty('BEPUNCT_STORE_PASSWORD') ?: TERATO_STORE_PASSWORD
+def store_file = project.findProperty('BEPUNCT_KEY_STORE_FILE') ?: TERATO_KEY_STORE_FILE
 
 if (alias && key_password && store_password && file(store_file).exists()) {
     android {

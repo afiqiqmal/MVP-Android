@@ -6,8 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 
-import com.java.mvp.mvpandroid.internal.PerActivity;
-import com.java.mvp.mvpandroid.repository.ConcealRepository;
+import com.java.mvp.mvpandroid.repository.PreferencesRepository;
 import com.java.mvp.mvpandroid.services.RegistrationIntentService;
 
 import com.mvp.client.entity.request.TokenRequest;
@@ -24,18 +23,17 @@ import io.reactivex.schedulers.Schedulers;
  * @author : hafiq on 23/01/2017.
  */
 
-@PerActivity
 public class SplashPresenter {
 
     private final SplashManager manager;
-    private final ConcealRepository preferences;
+    private final PreferencesRepository preferences;
     private SplashConnector mView;
     private final CompositeDisposable mSubscription = new CompositeDisposable();
 
     private TokenBroadCastService tokenBroadcastReceiver;
 
     @Inject
-    SplashPresenter(SplashManager manager, ConcealRepository preferences) {
+    SplashPresenter(SplashManager manager, PreferencesRepository preferences) {
         this.manager = manager;
         this.preferences = preferences;
         tokenBroadcastReceiver = new TokenBroadCastService();
@@ -67,7 +65,7 @@ public class SplashPresenter {
             activity.registerReceiver(tokenBroadcastReceiver, intentFilter);
 
             //send back first
-            sendBroatCast(tokenBroadcastReceiver);
+            sendBroadCast();
         }
         else{
 
@@ -82,7 +80,7 @@ public class SplashPresenter {
         }
     }
 
-    void voidReceiver(Activity activity, BroadcastReceiver tokenBroadcastReceiver){
+    void voidReceiver(Activity activity){
         try {
             activity.unregisterReceiver(tokenBroadcastReceiver);
         }
@@ -91,9 +89,9 @@ public class SplashPresenter {
         }
     }
 
-    private void sendBroatCast(TokenBroadCastService tokenBroadcastReceiver){
+    private void sendBroadCast(){
         if (mView == null) return;
-        mView.sendBroatCast(tokenBroadcastReceiver);
+        mView.sendBroadCast(tokenBroadcastReceiver);
     }
 
     private void sendToken(String token){

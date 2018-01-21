@@ -4,8 +4,8 @@ import android.content.Context;
 import android.os.Bundle;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.java.mvp.mvpandroid.utils.CommonUtils;
 
-import com.java.mvp.mvpandroid.utils.SubUtils;
 
 /**
  * @author : hafiq on 23/01/2017.
@@ -15,8 +15,8 @@ class FirebaseManager implements AnalyticView {
 
     private FirebaseAnalytics mFirebaseAnalytics;
 
-
     private Context context;
+
     FirebaseManager(Context context){
         this.context = context;
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
@@ -35,7 +35,7 @@ class FirebaseManager implements AnalyticView {
         eventAction.putString(FirebaseAnalytics.Param.CONTENT_TYPE, category);
         eventAction.putString(FirebaseAnalytics.Param.ITEM_NAME,content);
         if (content != null)
-            mFirebaseAnalytics.logEvent(SubUtils.analyticFormat(name), eventAction);
+            mFirebaseAnalytics.logEvent(CommonUtils.analyticFormat(name), eventAction);
         else
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, eventAction);
     }
@@ -47,7 +47,7 @@ class FirebaseManager implements AnalyticView {
 
     @Override
     public void sendUserProperties(String name, String value){
-        mFirebaseAnalytics.setUserProperty(SubUtils.analyticFormat(name),value);
+        mFirebaseAnalytics.setUserProperty(CommonUtils.analyticFormat(name),value);
     }
 
     @Override

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Font -->
+    <string name="font_bold">fonts/circularstd-bold.ttf</string>
+    <string name="font_regular">fonts/circularstd-book.ttf</string>
+    <string name="font_medium">fonts/circularstd-medium.ttf</string>
+    <string name="font_thin">fonts/circularstd-black.ttf</string>
+</resources>

@@ -2,20 +2,21 @@ package com.java.mvp.mvpandroid;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.res.Configuration;
+import android.os.StrictMode;
+import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
-import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.core.CrashlyticsCore;
-import com.facebook.FacebookSdk;
-import com.facebook.appevents.AppEventsLogger;
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.java.mvp.mvpandroid.helper.Language;
+import com.java.mvp.mvpandroid.internal.AppComponent;
 import com.java.mvp.mvpandroid.internal.AppModule;
-import com.java.mvp.mvpandroid.internal.DaggerGraph;
-import com.java.mvp.mvpandroid.internal.Graph;
-import com.java.mvp.mvpandroid.repository.ConcealRepository;
+import com.java.mvp.mvpandroid.internal.DaggerAppComponent;
+import com.mvp.client.internal.Constant;
+import com.zeroone.conceal.ConcealPrefRepository;
 
 import io.fabric.sdk.android.Fabric;
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 /**
  * @author : hafiq on 23/01/2017.
@@ -23,55 +24,77 @@ import io.fabric.sdk.android.Fabric;
 
 public class MVPApplication extends Application {
 
-    private Graph mGraph;
-
-    ConcealRepository preferencesRepository;
+    private AppComponent appComponent;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        appInit();
+        try {
+            ConcealPrefRepository.applicationInit(this);
 
-        setGraph(DaggerGraph.builder()
-                .appModule(new AppModule(this))
-                .build());
+            CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                    .setDefaultFontPath(getString(R.string.font_regular))
+                    .setFontAttrId(R.attr.fontPath)
+                    .build()
+            );
 
-        preferencesRepository = new ConcealRepository(this);
+            setAppComponent(DaggerAppComponent
+                    .builder()
+                    .appModule(new AppModule(this))
+                    .build());
 
-        if (preferencesRepository.getLanguage() == null)
-            preferencesRepository.changeLanguage(Language.ENGLISH,this);
-        else{
-            preferencesRepository.changeLanguage(preferencesRepository.getLanguage(),this);
+            errorHandler();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
         }
 
     }
 
-    private void appInit(){
-//        FacebookSdk.sdkInitialize(getApplicationContext());
-//        AppEventsLogger.activateApp(this);
+    private void errorHandler() {
+        Log.d(Constant.TAG, "error handler");
+        try {
+            Crashlytics crashlytics = new Crashlytics.Builder()
+                    .core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build())
+                    .build();
+            Fabric.with(this, crashlytics);
 
-//        Crashlytics crashlyticsKit = new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build();
-//        Fabric.with(this, crashlyticsKit,new Answers());
-
-        FirebaseAnalytics.getInstance(this).setAnalyticsCollectionEnabled(BuildConfig.DEBUG);
+            FirebaseAnalytics.getInstance(this).setAnalyticsCollectionEnabled(BuildConfig.DEBUG);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public Graph getGraph() {
-        return mGraph;
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+    }
+    public AppComponent getAppComponent() {
+        return appComponent;
     }
 
-    public void setGraph(Graph graph) {
-        this.mGraph = graph;
+    public void setAppComponent(AppComponent appComponent) {
+        this.appComponent = appComponent;
     }
 
-    public static Graph graph(Context context) {
+    public static AppComponent daggerAppComponent(Context context) {
         MVPApplication app = (MVPApplication) context.getApplicationContext();
-        return app.getGraph();
+        return app.getAppComponent();
     }
+
+    private void setDebugConfigs() {
+        StrictMode.enableDefaults();
+    }
+
 
     public static MVPApplication getApp(Context c) {
         return (MVPApplication) c.getApplicationContext();
+    }
+
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
     }
 
 }

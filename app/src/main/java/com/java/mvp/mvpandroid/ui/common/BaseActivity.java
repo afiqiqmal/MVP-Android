@@ -1,7 +1,6 @@
 package com.java.mvp.mvpandroid.ui.common;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Build;
@@ -14,16 +13,15 @@ import android.view.WindowManager;
 import com.java.mvp.mvpandroid.BuildConfig;
 import com.java.mvp.mvpandroid.MVPApplication;
 import com.java.mvp.mvpandroid.analytics.AnalyticHelper;
-import com.java.mvp.mvpandroid.internal.ActivityGraph;
-import com.java.mvp.mvpandroid.internal.ActivityModule;
-import com.java.mvp.mvpandroid.internal.Graph;
-import com.java.mvp.mvpandroid.permission.MultiplePermissionConnector;
-import com.java.mvp.mvpandroid.permission.PermissionConnector;
-import com.java.mvp.mvpandroid.repository.ConcealRepository;
+import com.java.mvp.mvpandroid.internal.AppComponent;
+import com.java.mvp.mvpandroid.internal.activity.ActivityComponent;
+import com.java.mvp.mvpandroid.internal.activity.ActivityModule;
+import com.java.mvp.mvpandroid.permission.RxPermissionHelper;
+import com.java.mvp.mvpandroid.repository.PreferencesRepository;
 import com.java.mvp.mvpandroid.utils.DeviceUtils;
 import com.java.mvp.mvpandroid.utils.ErrorUtils;
 import com.java.mvp.mvpandroid.utils.ProgressDialogUtils;
-import com.logger.min.easylogger.Logger;
+import com.java.mvp.mvpandroid.utils.TypeFaceUtils;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import javax.inject.Inject;
@@ -42,7 +40,7 @@ public class BaseActivity extends AppCompatActivity {
     protected CompositeDisposable mSubscriptions;
 
     @Inject
-    protected ConcealRepository preferencesRepository;
+    protected PreferencesRepository preferencesRepository;
 
     @Inject
     protected ErrorUtils errorUtils;
@@ -50,24 +48,24 @@ public class BaseActivity extends AppCompatActivity {
     @Inject
     protected AnalyticHelper analyticHelper;
 
-    @Inject
-    protected ProgressDialogUtils progress;
 
-    RxPermissions rxPermissions;
+    @Inject
+    protected TypeFaceUtils typeFaceUtils;
+
+    @Inject
+    protected RxPermissionHelper rxPermissions;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        new Logger.Builder(this).setTag("TAG").enableLog(BuildConfig.DEBUG).create();
 
-        activityGraph().inject(this);
+        activityComponent().inject(this);
 
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
 
         DeviceUtils.closeSoftKeyboard(this);
-
-        rxPermissions = new RxPermissions(this);
+        rxPermissions.setRxPermissions(new RxPermissions(this));
     }
 
     @Override
@@ -82,6 +80,16 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
     }
@@ -89,7 +97,6 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     public void onStop() {
         super.onStop();
-        unsubscribeAll();
     }
 
     @Override
@@ -97,12 +104,12 @@ public class BaseActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    public Graph getGraph() {
-        return MVPApplication.graph(this);
+    protected ActivityComponent activityComponent() {
+        return getAppComponent().activityComponent(new ActivityModule(this));
     }
 
-    protected ActivityGraph activityGraph() {
-        return getGraph().activityGraph(new ActivityModule(this));
+    public AppComponent getAppComponent() {
+        return MVPApplication.daggerAppComponent(this);
     }
 
     protected void addSubscription(Disposable s) {
@@ -115,53 +122,8 @@ public class BaseActivity extends AppCompatActivity {
         mSubscriptions.clear();
     }
 
-    public void requestPermissions(PermissionConnector connector,String... permission){
-        rxPermissions
-                .request(permission)
-                .subscribe((granted) -> {
-                    connector.isPermissionGranted(granted);
-                });
+    @Override
+    public void onBackPressed() {
+        supportFinishAfterTransition();
     }
-
-    public void requestEachPermissions(MultiplePermissionConnector connector, String... permissions){
-        rxPermissions
-                .requestEach(permissions)
-                .subscribe(permission -> {
-                    if (permission.granted){
-                        connector.isPermissionGranted(permission.name,true);
-                    }
-                    else if (permission.shouldShowRequestPermissionRationale){
-                        connector.isPermissionShouldShowRationale(permission.name);
-                    }
-                    else{
-                        connector.isPermissionGranted(permission.name,false);
-                    }
-                });
-    }
-
-    public void requestPermissionAgain(PermissionConnector connector, String... permissions){
-        AlertDialog.Builder requestAgain = new AlertDialog.Builder(this);
-        requestAgain.setCancelable(false);
-        requestAgain.setTitle("Permission");
-        requestAgain.setMessage("You are not able to proceed if you not allow those permission");
-        requestAgain.setPositiveButton("Request Again", (dialog, which) -> requestPermissions(connector, permissions));
-        requestAgain.setNegativeButton("Cancel", (dialog, which) -> {dialog.dismiss();System.exit(0);});
-        requestAgain.create().show();
-    }
-
-
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
-    public void showMessageRationale() {
-        new AlertDialog.Builder(this).setTitle("Attention")
-                .setCancelable(false)
-                .setMessage("This permissions is needed for doing fancy stuff, so please, allow it!!!")
-                .setNegativeButton(android.R.string.cancel, (dialog, which) -> {
-                    dialog.dismiss();
-                })
-                .setPositiveButton(android.R.string.ok, (dialog, which) -> {
-                    dialog.dismiss();
-                })
-                .show();
-    }
-
 }

@@ -8,6 +8,9 @@ ext{
     getDateTime = this.&getDateTime
 
     getApi = this.&getApi
+    getClientService = this.&getClientService
+    getClientSecretKey = this.&getClientSecretKey
+    getClientPowerByHeader = this.&getClientPowerByHeader
     getGoogleApi = this.&getGoogleApi
 
     getCurrentFlavor = this.&getCurrentFlavor
@@ -24,16 +27,31 @@ def getDateTime() {
 def getApi() {
     logger.debug("getting api url...")
 
-    String dApi = MVP_URL_API_DEBUG
-    String rApi = MVP_URL_API_PROD
+    String dApi = BEPUNCT_URL_API_DEBUG
+    String rApi = BEPUNCT_URL_API_PROD
     return verifyFlavor(dApi,rApi);
+}
+
+def getClientService() {
+    String cs = BEPUNCT_URL_API_SERVICE
+    return cs
+}
+
+def getClientSecretKey() {
+    String cs = BEPUNCT_URL_API_SECRET
+    return cs
+}
+
+def getClientPowerByHeader() {
+    String cs = BEPUNCT_POWERED_BY
+    return cs;
 }
 
 def getGoogleApi(){
     logger.debug("getting googleapi key...")
 
-    String dApi = MVP_GOOGLE_MAPS_API_DEBUG_KEY
-    String rApi = MVP_GOOGLE_MAPS_API_KEY
+    String dApi = BEPUNCT_GOOGLE_MAPS_API_DEBUG_KEY
+    String rApi = BEPUNCT_GOOGLE_MAPS_API_KEY
     return verifyFlavor(dApi,rApi);
 }
 

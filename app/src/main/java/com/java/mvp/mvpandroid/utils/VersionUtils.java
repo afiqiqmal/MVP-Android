@@ -1,10 +1,9 @@
 package com.java.mvp.mvpandroid.utils;
 
-import android.app.Activity;
-import android.content.pm.PackageManager;
+import android.support.annotation.NonNull;
 
 /**
- * Created by hafiq on 10/10/2016.
+ * @author : hafiq on 10/10/2016.
  */
 
 public class VersionUtils implements Comparable<VersionUtils> {
@@ -24,9 +23,7 @@ public class VersionUtils implements Comparable<VersionUtils> {
     }
 
     @Override
-    public int compareTo(VersionUtils next) {
-        if(next == null)
-            return 1;
+    public int compareTo(@NonNull VersionUtils next) {
         String[] curStr = this.get().split("\\.");
         String[] nextStr = next.get().split("\\.");
         int length = Math.max(curStr.length, nextStr.length);

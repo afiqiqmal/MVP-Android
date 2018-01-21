@@ -1,6 +1,5 @@
 apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
-//apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'com.jakewharton.butterknife'
 apply plugin: 'io.fabric'
 apply from : 'dependencies.gradle'
@@ -9,35 +8,40 @@ apply from : 'function.gradle'
 
 def versionMajor = 1
 def versionMinor = 0
-def versionPatch = 0
+def versionPatch = 1
+def versionFix = 0
 
-def sumVersionCode = versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100;
+def sumVersionCode = versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionFix * 10;
+
+def appName = "MVP"
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
 
-
     defaultConfig {
-        applicationId "com.java.mvp.mvpandroid"
 
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
 
         versionCode sumVersionCode
-        versionName "${versionMajor}.${versionMinor}.${versionPatch}"
+        versionName "${versionMajor}.${versionMinor}.${versionPatch}.${versionFix}"
+
+        multiDexEnabled true
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
-        multiDexEnabled true
+        renderscriptTargetApi 25
+        renderscriptSupportModeEnabled true
     }
 
     buildTypes.each{
-        it.resValue "string", "facebook_app_id", (project.findProperty("MVP_FACEBOOK_ID")?:"")
-        it.resValue "string", "facebook_auth", (project.findProperty("MVP_FACEBOOK_AUTH")?:"")
-        it.resValue "string", "fb_login_protocol_scheme", (project.findProperty("MVP_FACEBOOK_PROTOCOL")?:"")
         it.resValue "string", "google_maps_key", getGoogleApi()
         it.buildConfigField 'String','URL_API',getEncryptKey(getApi())
+        it.buildConfigField 'String','CLIENT_SERVICE',getEncryptKey(getClientService())
+        it.buildConfigField 'String','SECRET_KEY',getEncryptKey(getClientSecretKey())
+        it.buildConfigField 'String','X_POWERED_BY',getEncryptKey(getClientPowerByHeader())
+        it.buildConfigField 'String','BEPUNCT', '"'+appName+'"'
     }
 
     buildTypes {
@@ -46,21 +50,22 @@ android {
             testCoverageEnabled true
             versionNameSuffix "-staging"
             minifyEnabled false
-            buildConfigField 'String','URL_API',getEncryptKey(getApi())
+            debuggable true
+
+            ext.enableCrashlytics = false
         }
 
         release {
             zipAlignEnabled true
             minifyEnabled true
             shrinkResources true
+            debuggable false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-
-            buildConfigField 'String','URL_API',getEncryptKey(getApi())
         }
 
         applicationVariants.all { variant ->
             variant.outputs.each { output ->
-                def finalName = "mvp-" + variant.versionName + "-" + variant.productFlavors[0].name + "-" + variant.buildType.name + "-" + getDateTime() + ".apk";
+                def finalName = appName+"-" + variant.versionName + "-" + variant.productFlavors[0].name + "-" + variant.buildType.name + "-" + getDateTime() + ".apk";
                 output.outputFile = new File(output.outputFile.parent, finalName)
             }
         }
@@ -87,9 +92,9 @@ android {
     }
 
     lintOptions {
-        checkReleaseBuilds false
-        abortOnError false
+        disable 'MissingTranslation'
     }
+
     packagingOptions {
         exclude 'META-INF/ASL2.0'
         exclude 'META-INF/DEPENDENCIES.txt'

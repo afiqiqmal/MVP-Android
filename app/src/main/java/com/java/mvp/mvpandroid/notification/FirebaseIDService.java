@@ -4,7 +4,7 @@ import com.google.firebase.iid.FirebaseInstanceIdService;
 
 
 /**
- * Created by hafiq on 08/09/2016.
+ * @author : hafiq on 08/09/2016.
  */
 public class FirebaseIDService extends FirebaseInstanceIdService {
     @Override

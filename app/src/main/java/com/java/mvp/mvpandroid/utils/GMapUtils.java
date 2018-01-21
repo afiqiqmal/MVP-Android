@@ -50,7 +50,7 @@ public class GMapUtils {
         this.modeType = modeType;
     }
 
-    public LinkedHashMap<String,String> getDirectionsUrl(LatLng origin,LatLng dest){
+    public LinkedHashMap<String,String> getDirectionsUrl(LatLng origin, LatLng dest){
 
         LinkedHashMap<String,String> map = new LinkedHashMap<>();
         map.put("origin",origin.latitude+","+origin.longitude);

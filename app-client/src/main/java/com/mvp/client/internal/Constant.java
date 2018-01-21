@@ -23,6 +23,7 @@ public class Constant {
     public static final int CONNECTTIMEOUT = 20;
 
     public static final String TAG = "MVP";
+    public static final String ERROR_TAG = "MVP_ERROR";
 
     public static final String LANGUAGE = "get_lang";
     public static final String LANGUAGE_LOCALE = "get_lang_locale";

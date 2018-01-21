@@ -14,5 +14,5 @@ public interface SplashConnector {
     void showLoading();
     void showError(Throwable throwable);
     void sendToken(String token);
-    void sendBroatCast(BroadcastReceiver broadcastReceiver);
+    void sendBroadCast(BroadcastReceiver broadcastReceiver);
 }

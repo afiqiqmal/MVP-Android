@@ -21,36 +21,19 @@
 -dontskipnonpubliclibraryclasses
 -forceprocessing
 
-#-useuniqueclassmembernames
-#-renamesourcefileattribute
-#-repackageclasses ''
-#-allowaccessmodification
-#-optimizationpasses 5
-#-dontusemixedcaseclassnames
-#-dontskipnonpubliclibraryclasses
-#-dontpreverify
-#-verbose
-
 #########--------Android Support--------#########
 -keep class android.support.v4.app.** { *; }
 -keep interface android.support.v4.app.** { *; }
 -dontwarn android.support.**
 
-##########--------Webview--------#########
-#-keepclassmembers class * {
-#    @android.webkit.JavascriptInterface <methods>;
-#}
-
 #########--------Remove Log--------#########
 -assumenosideeffects class android.util.Log { *; }
--assumenosideeffects class com.logger.min.easylogger.Logger { *; }
 
 #########--------Retrofit + RxJava--------#########
 -dontwarn okio.**
 -dontwarn java.lang.invoke.*
 -dontwarn retrofit2.Platform$Java8
--dontwarn javax.annotation.Nullable
--dontwarn javax.annotation.ParametersAreNonnullByDefault
+-dontwarn javax.annotation.**
 
 -keep class retrofit.** { *; }
 -keep class retrofit2.** { *; }
@@ -66,10 +49,8 @@
     @retrofit2.* <methods>;
 }
 
-#
-#-keep class com.google.gson.** { *; }
-#-keep class com.google.inject.** { *; }
-#-keep class javax.inject.** { *; }
+
+##### RXJAVA #####
 
 -dontwarn sun.misc.**
 
@@ -100,28 +81,6 @@
     rx.internal.util.atomic.LinkedQueueNode consumerNode;
 }
 
-###### ICEPICK ######
-#-dontwarn icepick.**
-#-keep class icepick.** { *; }
-#-keep class **$$Icepick { *; }
-#-keepclasseswithmembernames class * {
-#    @icepick.* <fields>;
-#}
-#-keepnames class * { @icepick.State *;}
-
-
-####### BUTTER KNIFE ######
-## Retain generated class which implement Unbinder.
-#-keep public class * implements butterknife.Unbinder { public <init>(**, android.view.View); }
-#
-## Prevent obfuscation of types which use ButterKnife annotations since the simple name
-## is used to reflectively look up the generated ViewBinding.
-#-keep class butterknife.*
-#-keepclasseswithmembernames class * { @butterknife.* <methods>; }
-#-keepclasseswithmembernames class * { @butterknife.* <fields>; }
-
-
-
 #-keep,allowobfuscation @interface com.facebook.crypto.proguard.annotations.DoNotStrip
 #-keep,allowobfuscation @interface com.facebook.crypto.proguard.annotations.KeepGettersAndSetters
 #
@@ -136,15 +95,10 @@
 #  *** get*();
 #}
 
--keep class com.facebook.** { *; }
--keep interface com.facebook.** { *; }
--dontwarn com.facebook.**
 
-
--keeppackagenames org.jsoup.nodes
-
+-keep class android.support.v8.renderscript.** { *; }
 
 # Keep Model Classes
-#-keep class my.gov.islam.smarthalal.model.** { *; }
-#-keep class my.gov.islam.smarthalal.client.entity.response.** { *; }
-#-keep class my.gov.islam.smarthalal.client.entity.request.** { *; }
+#-keep class com.bepunct.mobile.model.** { *; }
+#-keep class com.bepunct.mobile.factory.entity.response.** { *; }
+#-keep class com.bepunct.mobile.factory.entity.request.** { *; }
