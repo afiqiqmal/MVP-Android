@@ -53,7 +53,7 @@ This project already setup firebase analytics. just replace the <b>google-servic
 <br>
 Create gradle.properties (if not exist), put
 ```gradle
-SMART_URL_API_PROD = "YOUR API URL"
+MVP_URL_API_PROD = "YOUR API URL"
 ```
 
 ##Sample
