@@ -6,7 +6,7 @@ import com.google.gson.JsonDeserializer;
 import com.java.mvp.mvpandroid.BuildConfig;
 import com.java.mvp.mvpandroid.repository.PreferencesRepository;
 import com.java.mvp.mvpandroid.utils.BaseCryptUtils;
-import com.mvp.client.RestApi;
+import com.mvp.client.internal.RestApi;
 
 import java.util.Date;
 

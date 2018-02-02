@@ -4,11 +4,11 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 
 
-import com.facebook.crypto.CryptoConfig;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.java.mvp.mvpandroid.R;
 import com.zeroone.conceal.ConcealPrefRepository;
+import com.zeroone.conceal.model.CryptoType;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -58,8 +58,7 @@ public class PreferencesRepository{
     public PreferencesRepository(Context context) {
         mContext = context;
         concealPrefRepository = new ConcealPrefRepository.PreferencesBuilder(mContext)
-                .useDefaultPrefStorage()
-                .sharedPrefsBackedKeyChain(CryptoConfig.KEY_256)
+                .sharedPrefsBackedKeyChain(CryptoType.KEY_256)
                 .enableCrypto(true,true)
                 .createPassword(mContext.getString(R.string.app_name))
                 .setFolderName(mContext.getString(R.string.app_name))

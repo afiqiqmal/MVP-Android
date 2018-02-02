@@ -1,4 +1,4 @@
-package com.java.mvp.mvpandroid.ui.custom;
+package com.java.mvp.mvpandroid.ui.custom.view;
 
 import android.content.Context;
 import android.support.v4.view.ViewPager;
@@ -33,6 +33,5 @@ public class BlockPager extends ViewPager {
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
         return !block && super.onTouchEvent(ev);
-
     }
 }

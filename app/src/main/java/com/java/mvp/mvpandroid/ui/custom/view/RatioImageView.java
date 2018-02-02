@@ -1,5 +1,6 @@
-package com.java.mvp.mvpandroid.ui.custom;
+package com.java.mvp.mvpandroid.ui.custom.view;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -28,6 +29,7 @@ public class RatioImageView extends AppCompatImageView {
         init(context, attrs);
     }
 
+    @SuppressLint("CustomViewStyleable")
     private void init(Context context, AttributeSet attrs) {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.RatioView);
         aspectRatio = a.getFloat(R.styleable.RatioView_ratio, 1.3333f);

@@ -1,4 +1,4 @@
-package com.mvp.client;
+package com.mvp.client.internal;
 
 import com.mvp.client.entity.request.TokenRequest;
 import com.mvp.client.entity.response.TokenResponse;

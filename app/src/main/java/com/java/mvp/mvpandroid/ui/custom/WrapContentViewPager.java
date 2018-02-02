@@ -9,8 +9,7 @@ import android.view.View;
  * @author : hafiq on 25/02/2017.
  */
 
-public class WrapContentViewPager extends ViewPager
-{
+public class WrapContentViewPager extends ViewPager {
     public WrapContentViewPager(Context context)
     {
         super(context);
@@ -22,13 +21,11 @@ public class WrapContentViewPager extends ViewPager
     }
 
     @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
-    {
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
         int height = 0;
-        for(int i = 0; i < getChildCount(); i++)
-        {
+        for(int i = 0; i < getChildCount(); i++) {
             View child = getChildAt(i);
             child.measure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
 

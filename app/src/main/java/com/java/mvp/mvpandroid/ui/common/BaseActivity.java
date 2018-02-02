@@ -48,7 +48,6 @@ public class BaseActivity extends AppCompatActivity {
     @Inject
     protected AnalyticHelper analyticHelper;
 
-
     @Inject
     protected TypeFaceUtils typeFaceUtils;
 

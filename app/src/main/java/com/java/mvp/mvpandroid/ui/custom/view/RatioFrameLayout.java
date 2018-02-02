@@ -1,4 +1,4 @@
-package com.java.mvp.mvpandroid.ui.custom;
+package com.java.mvp.mvpandroid.ui.custom.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -9,7 +9,7 @@ import com.java.mvp.mvpandroid.R;
 
 
 /**
- * Created by hafiq on 14/11/2016.
+ * @author : hafiq on 14/11/2016.
  */
 
 public class RatioFrameLayout extends FrameLayout {

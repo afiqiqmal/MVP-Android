@@ -59,7 +59,7 @@ dependencies {
     }
 
     //sharedpref
-    compile 'com.github.afiqiqmal:ConcealSharedPreference-Android:1.4.0'
+    compile 'com.github.afiqiqmal:ConcealSharedPreference-Android:1.5.2'
 
     // Animate Anywhere
     compile ('com.andkulikov:transitionseverywhere:1.7.8'){

@@ -1,6 +1,7 @@
 package com.java.mvp.mvpandroid.ui.splash;
 
-import com.mvp.client.RestApi;
+import com.java.mvp.mvpandroid.ui.common.mvp.BaseManager;
+import com.mvp.client.internal.RestApi;
 import com.mvp.client.entity.request.TokenRequest;
 import com.mvp.client.entity.response.TokenResponse;
 
@@ -15,9 +16,7 @@ import io.reactivex.Observable;
  */
 
 @Singleton
-public class SplashManager {
-
-    RestApi restApi;
+public class SplashManager extends BaseManager {
 
     @Inject
     public SplashManager(RestApi api) {

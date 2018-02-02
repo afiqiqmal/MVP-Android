@@ -1,6 +1,4 @@
 apply plugin: 'java'
-apply plugin: 'me.tatarka.retrolambda'
-apply plugin: 'net.ltgt.apt'
 
 configurations {
     provided
@@ -22,6 +20,7 @@ dependencies {
     compile libraries.retrofitGsonConverter
     compile libraries.retrofitRxJavaAdapter
     compile libraries.retrofitLogInterceptor
+
     // RxJava
     compile libraries.rxJava
 }

@@ -9,6 +9,7 @@ import android.content.IntentFilter;
 import com.java.mvp.mvpandroid.repository.PreferencesRepository;
 import com.java.mvp.mvpandroid.services.RegistrationIntentService;
 
+import com.java.mvp.mvpandroid.ui.common.mvp.BasePresenter;
 import com.mvp.client.entity.request.TokenRequest;
 import com.mvp.client.entity.response.TokenResponse;
 
@@ -23,7 +24,7 @@ import io.reactivex.schedulers.Schedulers;
  * @author : hafiq on 23/01/2017.
  */
 
-public class SplashPresenter {
+public class SplashPresenter extends BasePresenter{
 
     private final SplashManager manager;
     private final PreferencesRepository preferences;
@@ -99,23 +100,27 @@ public class SplashPresenter {
         mView.sendToken(token);
     }
 
-    private void showLoading() {
+    @Override
+    public void showLoading() {
         if (mView == null) return;
         mView.showLoading();
     }
 
-    private void showContents(TokenResponse r) {
+    @Override
+    public void showContents(Object response) {
         if (mView == null) return;
-        mView.showContents(r);
+        mView.showContents((TokenResponse)response);
     }
 
-    private void showError(Throwable error) {
+    @Override
+    public void showError(Object error) {
         if (mView == null) return;
-        mView.showError(error);
+        mView.showError((Throwable) error);
     }
 
-    public void setView(SplashConnector view) {
-        mView = view;
+    @Override
+    public void setView(Object view) {
+        mView = (SplashConnector) view;
         if (view == null) mSubscription.clear();
     }
 }
