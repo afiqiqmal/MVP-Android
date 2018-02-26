@@ -6,6 +6,7 @@ import android.content.res.Configuration;
 import android.os.StrictMode;
 import android.util.Log;
 
+import com.chamber.java.library.SharedChamber;
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -13,7 +14,6 @@ import com.java.mvp.mvpandroid.internal.AppComponent;
 import com.java.mvp.mvpandroid.internal.AppModule;
 import com.java.mvp.mvpandroid.internal.DaggerAppComponent;
 import com.mvp.client.internal.Constant;
-import com.zeroone.conceal.ConcealPrefRepository;
 
 import io.fabric.sdk.android.Fabric;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
@@ -31,7 +31,7 @@ public class MVPApplication extends Application {
         super.onCreate();
 
         try {
-            ConcealPrefRepository.applicationInit(this);
+            SharedChamber.initChamber(this);
 
             CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                     .setDefaultFontPath(getString(R.string.font_regular))

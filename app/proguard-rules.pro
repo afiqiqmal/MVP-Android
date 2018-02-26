@@ -81,6 +81,14 @@
     rx.internal.util.atomic.LinkedQueueNode consumerNode;
 }
 
+-keep public class * implements com.bumptech.glide.module.GlideModule
+-keep public class * extends com.bumptech.glide.module.AppGlideModule
+-keep public enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** {
+  **[] $VALUES;
+  public *;
+}
+
+
 #-keep,allowobfuscation @interface com.facebook.crypto.proguard.annotations.DoNotStrip
 #-keep,allowobfuscation @interface com.facebook.crypto.proguard.annotations.KeepGettersAndSetters
 #

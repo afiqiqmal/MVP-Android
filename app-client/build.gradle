@@ -10,17 +10,17 @@ sourceSets {
     }
 }
 
-dependencies {
-    compile project(':app-core')
 
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(':app-core')
 
     // HTTP
-    compile libraries.retrofit
+    implementation libraries.retrofit
     compile libraries.retrofitGsonConverter
     compile libraries.retrofitRxJavaAdapter
     compile libraries.retrofitLogInterceptor
 
     // RxJava
-    compile libraries.rxJava
+    implementation libraries.rxJava
 }

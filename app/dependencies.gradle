@@ -1,87 +1,89 @@
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile project(':app-client')
-    androidTestCompile 'junit:junit:4.12'
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(':app-client')
+    androidTestImplementation 'junit:junit:4.12'
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
     // Android Support
-    compile libraries.design
-    compile libraries.cardView
-    compile libraries.appCompat
-    compile libraries.supportV4
-    compile libraries.gridView
-    compile libraries.transition
+    implementation libraries.design
+    implementation libraries.cardView
+    implementation libraries.appCompat
+    implementation libraries.supportV4
+    implementation libraries.gridView
+    implementation libraries.transition
 
     //Butterknife
-    compile libraries.butterknife
+    implementation libraries.butterknife
     annotationProcessor libraries.butterknifeCompiler
 
     // Google Play
-    compile libraries.googleMap
-    compile libraries.googleLocation
-    compile libraries.googlePlace
-    compile libraries.googlePlus
+    implementation libraries.googleMap
+    implementation libraries.googleLocation
+    implementation libraries.googlePlace
+    implementation libraries.googlePlus
 
     // Json
-    compile libraries.googleGson
+    implementation libraries.googleGson
 
     //Crashlytics
-    compile (libraries.fabric){
+    implementation (libraries.fabric){
         transitive = true
     }
 
     // Firebase
-    compile libraries.firebaseCore
-    compile libraries.firebaseAnalytic
-    compile libraries.firebasegcm
+    implementation libraries.firebaseCore
+    implementation libraries.firebaseAnalytic
+    implementation libraries.firebasegcm
 
     // Dagger
-    compile libraries.dagger
+    implementation libraries.dagger
     annotationProcessor libraries.daggerCompiler
-    provided libraries.javaAnnotations
+    compileOnly libraries.javaAnnotations
 
     // RxAndroid
-    compile libraries.rxAndroid
+    implementation libraries.rxAndroid
 
     //Image Rendering
-    compile libraries.glide
+    implementation libraries.glide
     annotationProcessor libraries.glideAnnotation
 
     //Rx Permission
-    compile libraries.rxpermission
+    implementation libraries.rxpermission
 
     //Font
-    compile (libraries.caligraphy){
-        exclude group: 'com.android.support', module: 'appcompat-v7'
+    implementation (libraries.caligraphy) {
+        exclude group: 'com.android.support'
         transitive = false
     }
 
     //sharedpref
-    compile 'com.github.afiqiqmal:ConcealSharedPreference-Android:1.5.2'
+    implementation ('com.github.afiqiqmal:SharedChamber:2.5.0') {
+        exclude group: 'com.google.code.gson', module: 'gson'
+    }
 
     // Animate Anywhere
-    compile ('com.andkulikov:transitionseverywhere:1.7.8'){
-        exclude group: 'com.android.support', module: 'support-v4'
+    implementation ('com.andkulikov:transitionseverywhere:1.7.8') {
+        exclude group: 'com.android.support'
     }
 
     //ImagePicker
-    compile ('com.mlsdev.rximagepicker:library:2.0.2') {
-        exclude group: 'com.android.support', module: 'appcompat-v7'
+    implementation ('com.mlsdev.rximagepicker:library:2.0.2') {
+        exclude group: 'com.android.support'
     }
 
     //RxLocation
-    compile ('pl.charmas.android:android-reactive-location2:2.1@aar') {
+    implementation ('pl.charmas.android:android-reactive-location2:2.0@aar') {
         ['com.android.support', 'io.reactivex.rxjava2'].each{
             exclude group: it
         }
     }
 
     //Blur view
-    compile 'com.github.mmin18:realtimeblurview:1.1.0'
+    implementation 'com.github.mmin18:realtimeblurview:1.1.0'
 
     //paginate
-    compile ('com.github.markomilos:paginate:0.5.1')
+    implementation ('com.github.markomilos:paginate:0.5.1')
 
 }

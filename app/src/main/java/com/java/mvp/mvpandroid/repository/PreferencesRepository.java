@@ -4,11 +4,11 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 
 
+import com.chamber.java.library.SharedChamber;
+import com.chamber.java.library.model.ChamberType;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.java.mvp.mvpandroid.R;
-import com.zeroone.conceal.ConcealPrefRepository;
-import com.zeroone.conceal.model.CryptoType;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -51,88 +51,84 @@ public class PreferencesRepository{
 
     private Context mContext;
 
-    private ConcealPrefRepository concealPrefRepository;
-    private ConcealPrefRepository.Editor concealEditor;
+    private SharedChamber sharedChamber;
 
     @Inject
     public PreferencesRepository(Context context) {
         mContext = context;
-        concealPrefRepository = new ConcealPrefRepository.PreferencesBuilder(mContext)
-                .sharedPrefsBackedKeyChain(CryptoType.KEY_256)
+        sharedChamber = new SharedChamber.ChamberBuilder(mContext)
+                .setChamberType(ChamberType.KEY_256)
                 .enableCrypto(true,true)
-                .createPassword(mContext.getString(R.string.app_name))
+                .setPassword(mContext.getString(R.string.app_name))
                 .setFolderName(mContext.getString(R.string.app_name))
-                .create();
+                .buildChamber();
 
-        concealEditor = new ConcealPrefRepository.Editor();
     }
 
-    public ConcealPrefRepository.UserPref getUserPref(){
-        return new ConcealPrefRepository.UserPref();
+    public SharedChamber.UserChamber getUserPref(){
+        return new SharedChamber.UserChamber();
     }
 
-    public ConcealPrefRepository getPref(){
-        return concealPrefRepository;
+    public SharedChamber getPref(){
+        return sharedChamber;
     }
 
     public boolean isShortCutCreated() {
-        return concealPrefRepository.getBoolean(SHORCUT_DEVICE, false);
+        return sharedChamber.getBoolean(SHORCUT_DEVICE, false);
     }
 
     public void setShortCutCreate(boolean bool) {
-        concealPrefRepository.putBoolean(SHORCUT_DEVICE, bool);
+        sharedChamber.put(SHORCUT_DEVICE, bool);
     }
 
     public void savePushToken(String token) {
         if (token == null) {
-            concealPrefRepository.remove(KEY_PUSH_TOKEN);
+            sharedChamber.remove(KEY_PUSH_TOKEN);
         } else {
-            concealPrefRepository.putString(KEY_PUSH_TOKEN, token);
+            sharedChamber.put(KEY_PUSH_TOKEN, token);
         }
     }
 
     public boolean isEnableTokenPush(){
-        return concealPrefRepository.getBoolean(TOKEN_SWITCH,true);
+        return sharedChamber.getBoolean(TOKEN_SWITCH,true);
     }
 
     public void enableTokenPush(boolean sent){
-        concealPrefRepository.putBoolean(TOKEN_SWITCH,sent);
+        sharedChamber.put(TOKEN_SWITCH,sent);
     }
 
     public String getPushToken() {
-        return concealPrefRepository.getString(KEY_PUSH_TOKEN, null);
+        return sharedChamber.getString(KEY_PUSH_TOKEN, null);
     }
 
 
     public boolean isPushTokenSent() {
-        return concealPrefRepository.getBoolean(KEY_PUSH_TOKEN_SENT, false);
+        return sharedChamber.getBoolean(KEY_PUSH_TOKEN_SENT, false);
     }
 
     public void setPushTokenSent(boolean sent) {
-        concealPrefRepository.putBoolean(KEY_PUSH_TOKEN_SENT, sent);
+        sharedChamber.put(KEY_PUSH_TOKEN_SENT, sent);
     }
 
     public void setServerToken(String token) {
         if (token == null) {
-            concealPrefRepository.remove(KEY_SERVER_TOKEN);
+            sharedChamber.remove(KEY_SERVER_TOKEN);
         } else {
-            concealPrefRepository.putString(KEY_SERVER_TOKEN, token);
+            sharedChamber.put(KEY_SERVER_TOKEN, token);
         }
     }
 
     public String getServerToken() {
-        return concealPrefRepository.getString(KEY_SERVER_TOKEN, null);
+        return sharedChamber.getString(KEY_SERVER_TOKEN, null);
     }
 
     public void setAuthToken(String auth) {
-        concealPrefRepository.putString(KEY_AUTH_TOKEN, auth);
+        sharedChamber.put(KEY_AUTH_TOKEN, auth);
     }
 
     public String getAuthToken() {
-        return concealPrefRepository.getString(KEY_AUTH_TOKEN, null);
+        return sharedChamber.getString(KEY_AUTH_TOKEN, null);
     }
-
-
 
 
     public void logout() {

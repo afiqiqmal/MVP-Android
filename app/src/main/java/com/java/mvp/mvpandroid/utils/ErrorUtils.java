@@ -65,12 +65,12 @@ public class ErrorUtils {
 
                     if (response.isShould_quit()) {
                         if(preferencesRepository != null) {
-                            preferencesRepository.getPref().clearPrefs();
+                            preferencesRepository.getPref().clearChamber();
                         }
                     }
                     else if (response.isShould_login()) {
                         if(preferencesRepository != null) {
-                            preferencesRepository.getPref().clearPrefs();
+                            preferencesRepository.getPref().clearChamber();
                         }
                     }
 
