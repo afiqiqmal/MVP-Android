@@ -1,26 +1,17 @@
-apply plugin: 'java'
-
-configurations {
-    provided
-}
-
-sourceSets {
-    main {
-        compileClasspath += configurations.provided
-    }
-}
-
+apply plugin: 'java-library'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation project(':app-core')
 
     // HTTP
     implementation libraries.retrofit
-    compile libraries.retrofitGsonConverter
-    compile libraries.retrofitRxJavaAdapter
-    compile libraries.retrofitLogInterceptor
+    api libraries.retrofitGsonConverter
+    api libraries.retrofitRxJavaAdapter
+    api libraries.retrofitLogInterceptor
 
     // RxJava
     implementation libraries.rxJava
 }
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
