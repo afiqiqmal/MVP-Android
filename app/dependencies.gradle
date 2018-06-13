@@ -34,7 +34,6 @@ dependencies {
 
     // Firebase
     implementation libraries.firebaseCore
-    implementation libraries.firebaseAnalytic
     implementation libraries.firebasegcm
 
     // Dagger

@@ -1,6 +1,7 @@
 package com.java.mvp.mvpandroid.ui.splash;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.os.Bundle;
@@ -58,6 +59,7 @@ public class SplashActivity extends BaseActivity implements SplashConnector {
         }
     }
 
+    @SuppressLint("CheckResult")
     private void runProcess() {
         // run timer for 3 seconds to mask process
         Observable.timer(3, TimeUnit.SECONDS)
@@ -66,9 +68,7 @@ public class SplashActivity extends BaseActivity implements SplashConnector {
                     isTokenFinished = true;
 
                     checkFinished();
-                },t->{
-                    errorUtils.recordError(t);
-                });
+                }, errorUtils::recordError);
 
 //        if (preferencesRepository.getPushToken() == null)
 //            mPresenter.requestPushToken(this);

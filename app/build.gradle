@@ -7,10 +7,10 @@ apply from : 'function.gradle'
 
 def versionMajor = 1
 def versionMinor = 0
-def versionPatch = 1
-def versionFix = 1
+def versionPatch = 0
+def versionFix = 0
 
-def sumVersionCode = versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionFix * 10;
+def sumVersionCode = versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionFix * 10
 
 def appName = "MVP"
 
@@ -31,6 +31,9 @@ android {
         multiDexEnabled true
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        renderscriptTargetApi 25
+        renderscriptSupportModeEnabled true
     }
 
     buildTypes.each{
@@ -46,8 +49,6 @@ android {
             versionNameSuffix "-staging"
             minifyEnabled false
             debuggable true
-
-            ext.enableCrashlytics = false
         }
 
         release {
@@ -57,26 +58,26 @@ android {
             debuggable false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
-
-        android.applicationVariants.all { variant ->
-            variant.outputs.all { output ->
-                outputFileName = appName+"-" + variant.versionName + "-" + variant.productFlavors[0].name + "-" + variant.buildType.name + "-" + getDateTime() + ".apk";
-            }
-        }
-
-        android.variantFilter { variant ->
-            if (variant.buildType.name == 'release' && variant.getFlavors().get(0).name == 'mock') {
-                variant.setIgnore(true)
-            }
-        }
-
-        applicationVariants.all { variant ->
-            variant.getAnnotationProcessorConfiguration().resolutionStrategy {
-                force libraries.supportAnnotations
-            }
-        }
-
     }
+
+    applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            outputFileName = appName+"-" + variant.versionName + "-" + variant.productFlavors[0].name + "-" + variant.buildType.name + "-" + getDateTime() + ".apk"
+        }
+    }
+
+    variantFilter { variant ->
+        if (variant.buildType.name == 'release' && variant.getFlavors().get(0).name == 'mock') {
+            variant.setIgnore(true)
+        }
+    }
+
+    applicationVariants.all { variant ->
+        variant.getAnnotationProcessorConfiguration().resolutionStrategy {
+            force libraries.supportAnnotations
+        }
+    }
+
 
     productFlavors {
         mock {
@@ -96,6 +97,7 @@ android {
 
     lintOptions {
         disable 'MissingTranslation'
+        disable 'Unchecked'
     }
 
     packagingOptions {
@@ -110,7 +112,11 @@ android {
         exclude 'META-INF/license.txt'
         exclude 'META-INF/dependencies.txt'
         exclude 'META-INF/LGPL2.1'
+        exclude 'LICENSE.txt'
+    }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
     }
 }
-
 apply plugin: 'com.google.gms.google-services'
